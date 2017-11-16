@@ -124,6 +124,7 @@ export default class CharacterSheet extends Component {
     super(...arguments)
 
     this.onChangeTab = this.onChangeTab.bind(this)
+    this.onCreateTool = this.onCreateTool.bind(this)
     this.onToggleAdvantage = this.onToggleAdvantage.bind(this)
 
     this.state = {
@@ -136,6 +137,9 @@ export default class CharacterSheet extends Component {
     this.setState({
       isAdvantage: !this.state.isAdvantage,
     })
+  }
+
+  onCreateTool () {
   }
 
   onChangeTab (e) {
@@ -489,72 +493,96 @@ export default class CharacterSheet extends Component {
               </div>
 
               <div className='list'>
-                <table>
-                  <thead>
-                    <tr>
-                      <td>Tool</td>
-                      <td>Proficiency</td>
-                      <td>Attribute</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      onClick={runMacro}
-                      data-macro={`#tool0 ${roll1d20}+5`}
-                    >
-                      <td>
-                        A new tool
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td>
-                        Strength
-                      </td>
-                    </tr>
-                    <tr className='editable'>
-                      <td>
-                        <input
-                          type='text'
-                          placeholder='Name'
-                          name='toolsAndProficienciesName'
-                          onChange={this.onChange}
-                        />
-                      </td>
-                      <td>
-                        <select
-                          type='text'
-                          placeholder=''
-                          name='toolsAndProficienciesBonus'
-                          onChange={this.onChange}
-                        >
-                          <option value={0}>Proficient</option>
-                          <option value={1}>Expertise</option>
-                          <option value={2}>Jack of all Trades</option>
-                        </select>
-                      </td>
-                      <td>
-                        <select
-                          type='text'
-                          placeholder=''
-                          name='toolsAndProficienciesAttribute'
-                          onChange={this.onChange}
-                        >
-                          {attributes.map((attr) => (
-                            <option key={`tools-and-proficiencies-attr-${attr}`} value={attr}>{attr}</option>
-                          ))}
-                        </select>
+                <div className='tables flex'>
+                  <table>
+                    <thead>
+                      <tr>
+                        <td>Tool</td>
+                        <td>Proficiency</td>
+                        <td>Attribute</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        onClick={runMacro}
+                        data-macro={`#tool0 ${roll1d20}+5 "Strength"`}
+                      >
+                        <td>
+                          A new tool
+                        </td>
+                        <td>
+                          5
+                        </td>
+                        <td>
+                          Strength
+                        </td>
+                      </tr>
+                      {false && (
+                        <tr className='editable'>
+                          <td>
+                            <input
+                              type='text'
+                              placeholder='Name'
+                              name='toolsAndProficienciesName'
+                              onChange={this.onChange}
+                            />
+                          </td>
+                          <td>
+                            <select
+                              type='text'
+                              placeholder=''
+                              name='toolsAndProficienciesBonus'
+                              onChange={this.onChange}
+                            >
+                              <option value={0}>Proficient</option>
+                              <option value={1}>Expertise</option>
+                              <option value={2}>Jack of all Trades</option>
+                            </select>
+                          </td>
+                          <td>
+                            <select
+                              type='text'
+                              placeholder=''
+                              name='toolsAndProficienciesAttribute'
+                              onChange={this.onChange}
+                            >
+                              {attributes.map((attr) => (
+                                <option key={`tools-and-proficiencies-attr-${attr}`} value={attr}>{attr}</option>
+                              ))}
+                            </select>
 
-                        <input
-                          type='number'
-                          placeholder='Mod'
-                          name='toolsAndProficienciesMod'
-                          onChange={this.onChange}
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                            <input
+                              type='number'
+                              placeholder='Mod'
+                              name='toolsAndProficienciesMod'
+                              onChange={this.onChange}
+                            />
+                          </td>
+                        </tr>
+                      )}
+                      <tr>
+                        <td colSpan={3} className='add'>
+                          <a onClick={this.onCreateTool}>
+                            + Add Item
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table className='edit'>
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className='editable'>
+                        <td>E</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
                 <h4>
                   Tool Proficiencies &amp; Custom Skills
@@ -562,6 +590,49 @@ export default class CharacterSheet extends Component {
               </div>
 
               <div className='list'>
+                <div className='tables flex'>
+                  <table className='proficiencies'>
+                    <thead>
+                      <tr>
+                        <td>Type</td>
+                        <td>Label</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        onClick={runMacro}
+                        data-macro={`#proficiency0 ${roll1d20}+5 "Strength"`}
+                      >
+                        <td>
+                          Language
+                        </td>
+                        <td>
+                          Elven
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan={3} className='add'>
+                          <a onClick={this.onCreateTool}>
+                            + Add Item
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table className='edit'>
+                    <thead>
+                      <tr>
+                        <td>&nbsp;</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className='editable'>
+                        <td>E</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
                 <h4>
                   Other Proficiencies &amp; Languages
                 </h4>
@@ -1207,19 +1278,24 @@ export default class CharacterSheet extends Component {
           table {
             font-size: 12px;
             color: ${color.grey[50]};
+            display: block;
+            flex: 1;
+            margin-bottom: 6px;
           }
 
-          table thead {
+          table thead tr {
             background-color: ${color.grey[900]};
+            width: 100%;
           }
 
           table td {
             vertical-align: top;
             padding: 3px;
+            width: 100%;
           }
 
           table td:first-child {
-            width: 124px;
+            max-width: inherit;
           }
 
           table input {
@@ -1248,6 +1324,33 @@ export default class CharacterSheet extends Component {
           table tbody tr.editable:hover {
             cursor: inherit;
             background-color: transparent;
+          }
+
+          .add {
+            text-align: center;
+          }
+
+          .add a {
+            font-size: 11px;
+            color: ${color.grey[400]};
+            transition: color 0.15s ease-out;
+          }
+
+          table.edit {
+            flex: inherit;
+          }
+
+          table.edit thead tr {
+            background-color: transparent;
+          }
+
+          .tables {
+            width: 100%;
+          }
+
+          table.proficiencies td:first-child {
+            width: 126px;
+            max-width: 126px;
           }
         `}</style>
       </div>
