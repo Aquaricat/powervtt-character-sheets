@@ -1,0 +1,82 @@
+{
+  "armorClass": 5,
+  "initiative": 6,
+  "age" : 40,
+  "alignment" : "Neutral Good",
+  "alliesAndOrganizations" : "Right of map, dark forest",
+  "background" : "Criminal",
+  "bonds" : "I want to prove myself to the elders of my warren, who pushed me out.",
+  "cantrips" : [ "Minor Illusion" ],
+  "characterAppearance" : "Jim is short, hairy, and the loudest creature in the room. Jim can be found in a room of crowed people from his contagious and uncontrollable belly laughter.",
+  "characterBackstory" : "Gimble Nackle-Timbers-Turen-Beren-Daergel, or \"Jim\" grew up as a generational outcast, coming from a long-line of Gnome outcasts. Shunned by general society, Jim grew accustomed to sneaking around and conning people for food or gold.\n\nAt the ripe age of 14, he was caught and put behind bars, sentenced to 15-years in jail for trying to pickpocket one of the city's elite, Valhik Turen. Jim escaped after only one week.\n\nJim traveled far from his city to escape prosecution but more importantly, to try and find a new way of life. He eventually found solstice with the Dwarves, where he took on a new life of worship to the God of Life.",
+  "characterClass" : "Cleric",
+  "charisma" : 13,
+  "charismaMod" : 1,
+  "constitution" : 12,
+  "constitutionMod" : 1,
+  "created" : 1508269162078,
+  "dexterity" : 12,
+  "dexterityMod" : 1,
+  "equipment" : [ {
+    "name" : "Warhammer",
+    "weight" : "0"
+  }, {
+    "name" : "Leather Armor",
+    "weight" : "0"
+  }, {
+    "name" : "Light Crossbow",
+    "weight" : "0"
+  }, {
+    "name" : "20 bolts",
+    "weight" : "0"
+  }, {
+    "name" : "Explorer's Pack",
+    "weight" : "0"
+  }, {
+    "name" : "A shield and holy symbol",
+    "weight" : "0"
+  }, {
+    "name" : "A crowbar",
+    "weight" : "0"
+  }, {
+    "name" : "A set of dark common clothes including a hood",
+    "weight" : "0"
+  }, {
+    "name" : "15GP",
+    "weight" : "1"
+  } ],
+  "eyes" : "Brown",
+  "flaws" : "My one-upsmanship is going to get me in big trouble one of these days.",
+  "gender" : "Male",
+  "hair" : "Brown",
+  "height" : "3",
+  "hitDice" : 1,
+  "hitDiceTotal" : 4,
+  "hitPointsCurrent" : 33,
+  "hitPointsMax" : 33,
+  "ideals" : "Respect: I’ve been misjudged before, and treat others with respect so I don’t make the same mistake. (Good)",
+  "intelligence" : 14,
+  "intelligenceMod" : 2,
+  "level" : 4,
+  "name" : "Gimble \"Jim\" Nackle-Timbers-Turen-Beren-Daergel",
+  "otherProficienciesAndLanguages" : "Specialty: Pickpocket\n\nSkill Proficiencies: Deception, Stealth\n\nTool Proficiencies: One type of gaming set, thieves’ tools\n\nLanguages: Common\n\nProficiencies: Light armor, medium armor, shields\n\nWeapons: Simple weapons\n\nTrinket: A fan that when unfolded, shows a sleeping cat",
+  "personalityTraits" : "There’s no tale so heroic that I won’t embellish it a little further.\n\nI have all kinds of half-finished projects in my room, my backpack, and my pockets.",
+  "proficiencyBonus" : 2,
+  "race" : "Forest Gnome",
+  "savingThrowCharisma" : 1,
+  "savingThrowConstitution" : 1,
+  "savingThrowDexterity" : 2,
+  "savingThrowIntelligence" : 1,
+  "savingThrowStrength" : 1,
+  "savingThrowWisdom" : 4,
+  "skin" : "Tan",
+  "speed" : 25,
+  "strength" : 10,
+  "strengthMod" : 0,
+  "texture" : "84a528e0dabf6d7083062709640cde8a",
+  "updated" : 1508877318477,
+  "user" : "3wU2FneTd9aZoJtHX80kVQuEvY52",
+  "weight" : 8,
+  "wisdom" : 15,
+  "wisdomMod" : 2
+}

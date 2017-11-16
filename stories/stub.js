@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { action } from '@storybook/addon-actions'
+import sampleCharacter from './sample.json'
 
 const removeableAttributes = {
   toolProficienciesAndCustomSkills: []
@@ -21,6 +22,7 @@ const character = {
   spellLevel: '',
   spellName: '',
   spells: [],
+  ...sampleCharacter,
 }
 
 export default function withStub (Child) {

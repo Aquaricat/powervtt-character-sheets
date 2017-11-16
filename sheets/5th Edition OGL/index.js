@@ -420,7 +420,7 @@ export default class CharacterSheet extends Component {
 
                       <div className='mod'>
                         <input
-                          defaultValue={`${character[attr.toLowerCase()]}Mod`}
+                          defaultValue={`${character[attr.toLowerCase() + 'Mod']}`}
                           name={`${attr.toLowerCase()}Mod`}
                           placeholder='0'
                           onChange={onChange}
@@ -713,8 +713,8 @@ export default class CharacterSheet extends Component {
                 <div className='max'>
                   <label>
                     <input
-                      defaultValue={character.hpMax}
-                      name='hpMax'
+                      defaultValue={character.hitPointsMax}
+                      name='hitPointsMax'
                       placeholder='0'
                       onChange={onChange}
                       type='number'
@@ -725,8 +725,8 @@ export default class CharacterSheet extends Component {
                 </div>
 
                 <input
-                  defaultValue={character.hp}
-                  name='hp'
+                  defaultValue={character.hitPointsCurrent}
+                  name='hitPointsCurrent'
                   onChange={onChange}
                   className='large'
                   placeholder='0'
@@ -738,8 +738,8 @@ export default class CharacterSheet extends Component {
 
               <div className='attribute attribute-sub'>
                 <input
-                  defaultValue={character.hpTemp}
-                  name='hpTemp'
+                  defaultValue={character.hitPointsTemp}
+                  name='hitPointsTemp'
                   onChange={onChange}
                   className='large'
                   placeholder='0'
