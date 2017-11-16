@@ -125,7 +125,9 @@ export default class CharacterSheet extends Component {
 
     this.onChangeTab = this.onChangeTab.bind(this)
     this.onCreateTool = this.onCreateTool.bind(this)
+    this.onToggleToolEditing = this.onToggleToolEditing.bind(this)
     this.onToggleAdvantage = this.onToggleAdvantage.bind(this)
+    this.onChange = this.onChange.bind(this)
 
     this.state = {
       isAdvantage: false,
@@ -139,8 +141,14 @@ export default class CharacterSheet extends Component {
     })
   }
 
+  onChange (e) {
+    const attr = e.target.name
+    const value = e.target.value
+
+
+  }
+
   onCreateTool () {
-    console.log('here')
     if (this.props.onUpdateAttribute) {
       this.props.onUpdateAttribute(
         'toolProficienciesAndCustomSkills',
@@ -175,8 +183,6 @@ export default class CharacterSheet extends Component {
       isAdvantage,
       tab,
     } = this.state
-
-    console.log(character)
 
     // If we have advantage, we tend to roll 2d20kh1 for most rolls, so we just store it here
     const roll1d20 = isAdvantage ? '2d20kh1' : '1d20'
@@ -532,56 +538,50 @@ export default class CharacterSheet extends Component {
                               <input
                                 type='text'
                                 placeholder='Name'
-                                name='toolsAndProficienciesName'
-                                onChange={this.onChange}
+                                name='toolProficienciesAndCustomSkills'
+                                onChange={onChange}
                               />
                             ) : tool.name}
                           </td>
                           <td>
-                            {tool.mod}
+                            {tool.isEditing ? (
+                              <select
+                                type='text'
+                                placeholder=''
+                                name='toolsAndProficienciesBonus'
+                                onChange={this.onChange}
+                              >
+                                <option value={0}>Proficient</option>
+                                <option value={1}>Expertise</option>
+                                <option value={2}>Jack of all Trades</option>
+                              </select>
+                            ) : tool.mod}
                           </td>
-                          <td>
-                            {tool.attribute}
-                          </td>
+                          {tool.isEditing ? (
+                            <td style={{ width: '124px' }} className='flex'>
+                              <select
+                                type='text'
+                                placeholder=''
+                                name='toolsAndProficienciesAttribute'
+                                onChange={this.onChange}
+                              >
+                                {attributes.map((attr) => (
+                                  <option key={`tools-and-proficiencies-attr-${attr}`} value={attr}>{attr}</option>
+                                ))}
+                              </select>
+
+                              <input
+                                type='number'
+                                placeholder='Mod'
+                                name='toolsAndProficienciesMod'
+                                onChange={this.onChange}
+                              />
+                            </td>
+                          ) : (
+                            <td>{tool.attribute}</td>
+                          )}
                         </tr>
                       ))}
-                      {false && (
-                        <tr className='editable'>
-                          <td>
-                          </td>
-                          <td>
-                            <select
-                              type='text'
-                              placeholder=''
-                              name='toolsAndProficienciesBonus'
-                              onChange={this.onChange}
-                            >
-                              <option value={0}>Proficient</option>
-                              <option value={1}>Expertise</option>
-                              <option value={2}>Jack of all Trades</option>
-                            </select>
-                          </td>
-                          <td>
-                            <select
-                              type='text'
-                              placeholder=''
-                              name='toolsAndProficienciesAttribute'
-                              onChange={this.onChange}
-                            >
-                              {attributes.map((attr) => (
-                                <option key={`tools-and-proficiencies-attr-${attr}`} value={attr}>{attr}</option>
-                              ))}
-                            </select>
-
-                            <input
-                              type='number'
-                              placeholder='Mod'
-                              name='toolsAndProficienciesMod'
-                              onChange={this.onChange}
-                            />
-                          </td>
-                        </tr>
-                      )}
                       <tr>
                         <td colSpan={3} className='add'>
                           <a onClick={this.onCreateTool}>
@@ -599,9 +599,23 @@ export default class CharacterSheet extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className='editable'>
-                        <td>E</td>
-                      </tr>
+                      {character.toolProficienciesAndCustomSkills.map((tool, i) => (
+                        <tr
+                          className={tool.isEditing && 'editable'}
+                          key={`tool-proficiency-edit-${i}`}
+                        >
+                          <td>
+                            <a onClick={this.onToggleToolEditing}>
+                              {tool.isEditing ? 'Close' : 'Edit'}
+                            </a>
+                            {tool.isEditing && (
+                              <a className='warning'>
+                                x
+                              </a>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -650,7 +664,7 @@ export default class CharacterSheet extends Component {
                     </thead>
                     <tbody>
                       <tr className='editable'>
-                        <td>E</td>
+                        <td>Edit</td>
                       </tr>
                     </tbody>
                   </table>
@@ -957,6 +971,9 @@ export default class CharacterSheet extends Component {
         )}
 
         <style jsx>{`
+          a {
+            transtiion: all 0.15s ease-out;
+          }
           h4 {
             color: ${color.grey[400]};
             font-weight: 700;
@@ -1346,6 +1363,28 @@ export default class CharacterSheet extends Component {
           table tbody tr.editable:hover {
             cursor: inherit;
             background-color: transparent;
+            color: inherit;
+          }
+
+          table tbody tr.editable a {
+            font-size: 10px;
+            margin-right: 3px;
+          }
+
+          table tbody tr.editable a:last-child {
+            margin-right: 0;
+          }
+
+          table tbody tr.editable a:hover {
+            color: ${color.yellow[500]};
+            cursor: pointer;
+          }
+
+          table tbody tr.editable a.warning {
+            margin-left: 3px;
+          }
+          table tbody tr.editable a.warning:hover {
+            color: ${color.error};
           }
 
           .add {
