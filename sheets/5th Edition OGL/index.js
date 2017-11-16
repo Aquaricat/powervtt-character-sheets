@@ -140,6 +140,21 @@ export default class CharacterSheet extends Component {
   }
 
   onCreateTool () {
+    console.log('here')
+    if (this.props.onUpdateAttribute) {
+      this.props.onUpdateAttribute(
+        'toolProficienciesAndCustomSkills',
+        [
+          ...this.props.character.toolProficienciesAndCustomSkills,
+          {
+            name: '',
+            bonus: '',
+            mod: '0',
+            isEditing: true,
+          },
+        ],
+      )
+    }
   }
 
   onChangeTab (e) {
@@ -160,6 +175,8 @@ export default class CharacterSheet extends Component {
       isAdvantage,
       tab,
     } = this.state
+
+    console.log(character)
 
     // If we have advantage, we tend to roll 2d20kh1 for most rolls, so we just store it here
     const roll1d20 = isAdvantage ? '2d20kh1' : '1d20'
@@ -503,29 +520,34 @@ export default class CharacterSheet extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr
-                        onClick={runMacro}
-                        data-macro={`#tool0 ${roll1d20}+5 "Strength"`}
-                      >
-                        <td>
-                          A new tool
-                        </td>
-                        <td>
-                          5
-                        </td>
-                        <td>
-                          Strength
-                        </td>
-                      </tr>
+                      {character.toolProficienciesAndCustomSkills.map((tool, i) => (
+                        <tr
+                          className={tool.isEditing && 'editable'}
+                          key={`tool-proficiency-${i}`}
+                          onClick={runMacro}
+                          data-macro={`#tool${i} ${roll1d20}+5 "Strength"`}
+                        >
+                          <td>
+                            {tool.isEditing ? (
+                              <input
+                                type='text'
+                                placeholder='Name'
+                                name='toolsAndProficienciesName'
+                                onChange={this.onChange}
+                              />
+                            ) : tool.name}
+                          </td>
+                          <td>
+                            {tool.mod}
+                          </td>
+                          <td>
+                            {tool.attribute}
+                          </td>
+                        </tr>
+                      ))}
                       {false && (
                         <tr className='editable'>
                           <td>
-                            <input
-                              type='text'
-                              placeholder='Name'
-                              name='toolsAndProficienciesName'
-                              onChange={this.onChange}
-                            />
                           </td>
                           <td>
                             <select
