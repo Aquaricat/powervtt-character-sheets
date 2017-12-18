@@ -1,29 +1,6 @@
 import React, { Component } from 'react'
 import { action } from '@storybook/addon-actions'
-import sampleCharacter from './sample.json'
-
-const removeableAttributes = {
-  toolProficienciesAndCustomSkills: []
-}
-
-const character = {
-  ...removeableAttributes,
-  attackBonus: '',
-  attackDamageType: '',
-  name: 'Test Character',
-  attackName: '',
-  attacksAndSpells: [],
-  cantripName: '',
-  cantrips: [],
-  equipment: [],
-  equipmentName: '',
-  equipmentWeight: '',
-  isDirty: false,
-  spellLevel: '',
-  spellName: '',
-  spells: [],
-  ...sampleCharacter,
-}
+import character from './sample'
 
 export default function withStub (Child) {
   return class Stub extends Component {
