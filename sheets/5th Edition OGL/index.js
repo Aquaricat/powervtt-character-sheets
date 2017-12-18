@@ -2086,11 +2086,11 @@ export default class CharacterSheet extends Component {
 }
 
 const Toggle = ({ isOn, onClick }) => (
-  <div className={`toggle ${isOn && 'on'}`} onClick={onClick}>
+  <div className={`toggler ${isOn && 'on'}`} onClick={onClick}>
     <span />
 
     <style jsx>{`
-      .toggle {
+      .toggler {
         background-color: ${color.grey[700]};
         border-radius: 24px;
         width: 48px;
@@ -2101,7 +2101,7 @@ const Toggle = ({ isOn, onClick }) => (
         transition: background 0.15s ease-out;
       }
 
-      .toggle span {
+      .toggler span {
         background-color: ${color.yellow[500]};
         display: block;
         border-radius: 24px;
@@ -2110,7 +2110,7 @@ const Toggle = ({ isOn, onClick }) => (
         width: 24px;
       }
 
-      .toggle span:hover {
+      .toggler span:hover {
         opacity: 0.7;
         cursor: pointer;
       }
