@@ -861,7 +861,7 @@ export default class CharacterSheet extends Component {
 
               <div className='list'>
                 <div className='tables flex'>
-                  <table>
+                  <table cellPadding={0} cellSpacing={0}>
                     <thead>
                       <tr>
                         <td>Tool</td>
@@ -945,7 +945,7 @@ export default class CharacterSheet extends Component {
                     </tbody>
                   </table>
 
-                  <table className='edit'>
+                  <table cellPadding={0} cellSpacing={0} className='edit'>
                     <thead>
                       <tr>
                         <td>&nbsp;</td>
@@ -980,7 +980,7 @@ export default class CharacterSheet extends Component {
 
               <div className='list'>
                 <div className='tables flex'>
-                  <table className='proficiencies'>
+                  <table cellPadding={0} cellSpacing={0} className='proficiencies'>
                     <thead>
                       <tr>
                         <td>Type</td>
@@ -1035,7 +1035,7 @@ export default class CharacterSheet extends Component {
                     </tbody>
                   </table>
 
-                  <table className='edit'>
+                  <table cellPadding={0} cellSpacing={0} className='edit'>
                     <thead>
                       <tr>
                         <td>&nbsp;</td>
@@ -1229,7 +1229,7 @@ export default class CharacterSheet extends Component {
 
               <div className='list attacks'>
                 <div className='tables flex'>
-                  <table>
+                  <table cellPadding={0} cellSpacing={0}>
                     <thead>
                       <tr>
                         <td>Name</td>
@@ -1298,7 +1298,7 @@ export default class CharacterSheet extends Component {
                     </tbody>
                   </table>
 
-                  <table className='edit'>
+                  <table cellPadding={0} cellSpacing={0} className='edit'>
                     <thead>
                       <tr>
                         <td>&nbsp;</td>
@@ -1331,7 +1331,7 @@ export default class CharacterSheet extends Component {
 
               <div className='list attacks'>
                 <div className='tables flex'>
-                  <table>
+                  <table cellPadding={0} cellSpacing={0}>
                     <thead>
                       <tr>
                         <td>Name</td>
@@ -1382,7 +1382,7 @@ export default class CharacterSheet extends Component {
                     </tbody>
                   </table>
 
-                  <table className='edit'>
+                  <table cellPadding={0} cellSpacing={0} className='edit'>
                     <thead>
                       <tr>
                         <td>&nbsp;</td>
@@ -1817,6 +1817,11 @@ export default class CharacterSheet extends Component {
 
           .character-sheet .death-saves {
             padding: 12px 0;
+            display: block;
+          }
+
+          .character-sheet .death-saves label {
+            display: block;
           }
 
           .character-sheet .col-2 .attribute,
@@ -2007,10 +2012,6 @@ export default class CharacterSheet extends Component {
 
           .character-sheet table.edit {
             flex: inherit;
-          }
-
-          .character-sheet table.edit thead tr {
-            background-color: transparent;
           }
 
           .character-sheet .tables {
