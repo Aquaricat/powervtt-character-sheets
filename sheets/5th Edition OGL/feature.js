@@ -8,23 +8,28 @@ export default class Feature extends Component {
 
   render () {
     const {
+      description,
+      i,
+      isEditing,
       name,
+      onChange,
+      onRemoveTool,
+      onToggleEditing,
       source,
       type,
-      i,
-      description,
-      onChange,
-      isEditing,
-      onToggleEditing,
     } = this.props
 
     return (
       <div className='feature'>
         {!isEditing && (
           <div className='info'>
-            <h3>{name}</h3>
+            <h3>
+              {name}
+              <a data-feature-id={i} onClick={onToggleEditing} className='edit'>Edit</a>
+            </h3>
             <h4>{source}: {type}</h4>
             <p>{description}</p>
+
           </div>
         )}
         {isEditing && (
@@ -85,6 +90,7 @@ export default class Feature extends Component {
             </div>
             <div className='actions'>
               <a data-feature-id={i} onClick={onToggleEditing}>Save</a>
+              <a data-feature-id={i} className='delete' onClick={onRemoveTool}>Delete</a>
             </div>
           </Fragment>
         )}
@@ -92,6 +98,25 @@ export default class Feature extends Component {
         <style jsx>{`
           .info {
             padding: 6px;
+          }
+
+          .info:hover .edit {
+            display: inline;
+          }
+
+          .edit {
+            margin-left: 6px;
+            font-family: 'Open Sans', serif;
+            font-size: 14px;
+            font-weight: 400;
+            display: none;
+            color: ${color.grey[500]};
+            transition: opacity 0.15s ease-out;
+          }
+
+          .edit:hover {
+            cursor: pointer;
+            opacity: 0.7;
           }
 
           h3, h4 {
@@ -164,6 +189,15 @@ export default class Feature extends Component {
           .actions a:hover {
            cursor: pointer;
            opacity: 0.7;
+          }
+
+          .actions .delete {
+            color: ${color.grey[500]};
+            font-size: 12px;
+          }
+
+          .actions .delete:hover {
+            color: ${color.error};
           }
         `}</style>
       </div>

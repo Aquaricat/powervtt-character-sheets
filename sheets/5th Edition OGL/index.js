@@ -200,6 +200,7 @@ export default class CharacterSheet extends Component {
     const equipmentId = e.target.getAttribute('data-equipment-id')
     const toolId = e.target.getAttribute('data-tool-id')
     const otherId = e.target.getAttribute('data-other-id')
+    const featureId = e.target.getAttribute('data-feature-id')
 
     let data = undefined
     let attribute = undefined
@@ -219,6 +220,10 @@ export default class CharacterSheet extends Component {
       const id = ~~otherId
       attribute = 'other_profs_and_langs'
       data = this.props.character.other_profs_and_langs.filter((_, i) => (id !== i))
+    } else if (featureId !== null) {
+      const id = ~~featureId
+      attribute = 'features_and_traits'
+      data = this.props.character.features_and_traits.filter((_, i) => (id !== i))
     }
 
     if (attribute && this.props.onUpdateAttribute) {
@@ -1409,6 +1414,7 @@ export default class CharacterSheet extends Component {
                     {...feature}
                     i={i}
                     onChange={this.onChange}
+                    onRemoveTool={this.onRemoveTool}
                     onToggleEditing={this.onToggleEditing}
                     runMacro={runMacro}
                   />
