@@ -7,26 +7,7 @@ export default class Attribute extends Component {
 
     this._updateState = this._updateState.bind(this)
 
-    this._updateState(props)
-
-    const {
-      attribute,
-      character,
-      code,
-      isSave,
-      score,
-    } = props
-
-    const isProficient = character[`${code}_prof`] || false
-    const save = isSave ? ' Save' : ''
-    this.state = {
-      macro: isProficient 
-        ? `!r 1d20+@me.${code}+@me.proficiency_bonus "${attribute}${save} (+${character.proficiency_bonus || 0} Proficient)"`
-        : `!r 1d20+@me.${code} "${attribute}${save}"`,
-      score: isProficient
-        ? score + character.proficiency_bonus
-        : score
-    }
+    this._updateState(props, true)
   }
 
   componentWillReceiveProps (props) {
@@ -37,6 +18,7 @@ export default class Attribute extends Component {
     const {
       attribute,
       character,
+      macroCode,
       code,
       isSave,
       roll1d20,
@@ -47,8 +29,8 @@ export default class Attribute extends Component {
     const save = isSave ? ' Save' : ''
     const state = {
       macro: isProficient 
-        ? `!r 1d20+@me.${code}+@me.proficiency_bonus "${attribute}${save} (+${character.proficiency_bonus || 0} Proficient)"`
-        : `!r 1d20+@me.${code} "${attribute}${save}"`,
+        ? `!r 1d20+@me.${macroCode}+@me.proficiency_bonus "${attribute}${save} (+${character.proficiency_bonus || 0} Proficient)"`
+        : `!r 1d20+@me.${macroCode} "${attribute}${save}"`,
       score: isProficient
         ? score + character.proficiency_bonus
         : score 

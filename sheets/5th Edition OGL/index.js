@@ -738,6 +738,7 @@ export default class CharacterSheet extends Component {
                       <Attribute
                         attribute={attr}
                         code={attr.toLowerCase()}
+                        macroCode={`${attr.toLowerCase()}_mod`}
                         character={character}
                         key={`saving-throw-${attr}`}
                         onChange={onChange}
@@ -755,6 +756,7 @@ export default class CharacterSheet extends Component {
                       <Attribute
                         attribute={skill.name}
                         code={skill.code}
+                        macroCode={`${skill.type.toLowerCase()}_mod`}
                         character={character}
                         key={`attribute-${skill.name}`}
                         onChange={onChange}
