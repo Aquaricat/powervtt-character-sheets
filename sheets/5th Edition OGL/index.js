@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import Attribute from './attribute'
 import { color } from '../styles'
 
 const attributes = [
@@ -784,10 +785,10 @@ export default class CharacterSheet extends Component {
                   <div className='proficiency'>
                     <div className='bonus'>
                       <input
-                        defaultValue={character.proficiency_bonus}
+                        value={character.proficiency_bonus}
                         name='proficiency_bonus'
                         placeholder='0'
-                        onChange={onChange}
+                        disabled={true}
                         type='number'
                       />
                     </div>
@@ -798,21 +799,17 @@ export default class CharacterSheet extends Component {
                   </div>
                   <div className='list'>
                     {attributes.map((attr) => (
-                      <div key={`saving-throw-${attr}`}>
-                        <input
-                          type='checkbox'
-                          onChange={onChange}
-                          name={`${attr.toLowerCase()}_prof`}
-                          defaultChecked={character[`${attr.toLowerCase()}_prof`] === true}
-                        />
-                        <label
-                          onClick={runMacro}
-                          data-macro={`!r ${roll1d20}+@me.${attr.toLowerCase()} "${attr} Save"`}
-                          data-as={character.key}
-                        >
-                          <strong>{character[`${attr.toLowerCase()}_mod`] || 0}</strong> {attr}
-                        </label>
-                      </div>
+                      <Attribute
+                        attribute={attr}
+                        code={attr.toLowerCase()}
+                        character={character}
+                        key={`saving-throw-${attr}`}
+                        onChange={onChange}
+                        runMacro={runMacro}
+                        roll1d20={roll1d20}
+                        score={character[`${attr.toLowerCase()}_mod`]}
+                        isSave={true}
+                      />
                     ))}
 
                     <h4>Saving Throws</h4>
@@ -820,21 +817,19 @@ export default class CharacterSheet extends Component {
 
                   <div className='list'>
                     {skills.map((skill) => (
-                      <div className='skill' key={`skill-${skill.name}`}>
-                        <input
-                          type='checkbox'
-                          onChange={onChange}
-                          name={`${skill.code}_prof`}
-                          defaultChecked={character[`${skill.code}_prof`] === true}
-                        />
-                        <label
-                          onClick={runMacro}
-                          data-macro={`!r ${roll1d20}+@me.${skill.code} "${skill.name}"`}
-                          data-as={character.key}
-                        >
-                          <strong>{character[`${skill.type.toLowerCase()}_mod`] || 0}</strong> {skill.name} <span className='skill-type'>({skill.type.slice(0, 3)})</span>
-                        </label>
-                      </div>
+                      <Attribute
+                        attribute={skill.name}
+                        code={skill.code}
+                        character={character}
+                        key={`attribute-${skill.name}`}
+                        onChange={onChange}
+                        runMacro={runMacro}
+                        roll1d20={roll1d20}
+                        isSave={true}
+                        score={character[`${skill.type.toLowerCase()}_mod`] || 0}
+                        type={skill.type}
+                      />
+
                     ))}
 
                     <h4>Skills</h4>

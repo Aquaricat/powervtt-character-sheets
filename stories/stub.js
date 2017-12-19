@@ -24,9 +24,24 @@ export default function withStub (Child) {
         value = e.target.checked
       }
 
-      this.setState({
+      // the new state to set
+      const state = {
         [attr]: value,
-      })
+      }
+
+      if (attr === 'level') {
+        if (value >= 17) {
+          state.proficiency_bonus = 6 
+        } else if (value >= 13) {
+          state.proficiency_bonus = 5 
+        } else if (value >= 9) {
+          state.proficiency_bonus = 4
+        } else if (value >= 7) {
+          state.proficiency_bonus = 3
+        }
+      }
+
+      this.setState(state)
 
       action('change')(attr, value)
     }
