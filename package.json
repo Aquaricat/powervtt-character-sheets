@@ -2,10 +2,7 @@
   "name": "powervtt-character-sheets",
   "version": "0.1.0",
   "description": "Character sheets for use in Power Virtual TableTop",
-  "main": "dist/app.js",
-  "files": [
-    "dist"
-  ],
+  "main": "index.js",
   "scripts": {
     "build": "webpack",
     "build-storybook": "build-storybook",
@@ -15,10 +12,7 @@
   },
   "author": "Unicorn Heart Club LLC",
   "license": "MIT",
-  "dependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@storybook/addon-actions": "^3.2.15",
     "@storybook/addon-links": "^3.2.15",
@@ -27,6 +21,8 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "clean-webpack-plugin": "^0.1.17",
-    "next": "^4.2.1"
+    "next": "^4.2.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   }
 }
