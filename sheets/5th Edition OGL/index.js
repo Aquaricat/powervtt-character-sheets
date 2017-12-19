@@ -794,6 +794,7 @@ export default class CharacterSheet extends Component {
                         <td>Tool</td>
                         <td>Proficiency</td>
                         <td>Attribute</td>
+                        <td></td>
                       </tr>
                     </thead>
                     <tbody>
@@ -860,30 +861,6 @@ export default class CharacterSheet extends Component {
                           ) : (
                             <td>{tool.attribute}</td>
                           )}
-                        </tr>
-                      ))}
-                      <tr>
-                        <td colSpan={3} className='add'>
-                          <a onClick={this.onAddTool}>
-                            + Add Item
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <table cellPadding={0} cellSpacing={0} className='edit'>
-                    <thead>
-                      <tr>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {character.tools_and_skills.map((tool, i) => (
-                        <tr
-                          className={tool.isEditing && 'editable'}
-                          key={`tool-proficiency-edit-${i}`}
-                        >
                           <td>
                             <a data-tool-id={i} onClick={this.onToggleEditing}>
                               {tool.isEditing ? 'Save' : 'Edit'}
@@ -896,6 +873,13 @@ export default class CharacterSheet extends Component {
                           </td>
                         </tr>
                       ))}
+                      <tr>
+                        <td colSpan={3} className='add'>
+                          <a onClick={this.onAddTool}>
+                            + Add Item
+                          </a>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -912,6 +896,7 @@ export default class CharacterSheet extends Component {
                       <tr>
                         <td>Type</td>
                         <td>Label</td>
+                        <td></td>
                       </tr>
                     </thead>
                     <tbody>
@@ -950,30 +935,6 @@ export default class CharacterSheet extends Component {
                             ) : prof.proficiency
                           }
                           </td>
-                        </tr>
-                      ))}
-                      <tr>
-                        <td colSpan={3} className='add'>
-                          <a onClick={this.onAddProficiency}>
-                            + Add Item
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <table cellPadding={0} cellSpacing={0} className='edit'>
-                    <thead>
-                      <tr>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {character.other_profs_and_langs.map((prof, i) => (
-                        <tr
-                          className={prof.isEditing && 'editable'}
-                          key={`prof-proficiency-edit-${i}`}
-                        >
                           <td>
                             <a data-other-id={i} onClick={this.onToggleEditing}>
                               {prof.isEditing ? 'Save' : 'Edit'}
@@ -986,8 +947,16 @@ export default class CharacterSheet extends Component {
                           </td>
                         </tr>
                       ))}
+                      <tr>
+                        <td colSpan={3} className='add'>
+                          <a onClick={this.onAddProficiency}>
+                            + Add Item
+                          </a>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
+
                 </div>
                 <h4>
                   Other Proficiencies &amp; Languages
@@ -1161,6 +1130,7 @@ export default class CharacterSheet extends Component {
                       <tr>
                         <td>Name</td>
                         <td>Attack</td>
+                        <td></td>
                       </tr>
                     </thead>
                     <tbody>
@@ -1181,6 +1151,7 @@ export default class CharacterSheet extends Component {
                                 name='name'
                                 onChange={this.onChange}
                                 defaultValue={attack.name}
+                                style={{ minWidth: 198 }}
                               />
                             ) : attack.name}
                           </td>
@@ -1213,30 +1184,6 @@ export default class CharacterSheet extends Component {
                           ) : (
                             <td>{attack.attribute} + {attack.mod}</td>
                           )}
-                        </tr>
-                      ))}
-                      <tr>
-                        <td colSpan={3} className='add'>
-                          <a onClick={this.onAddAttack}>
-                            + Add Item
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <table cellPadding={0} cellSpacing={0} className='edit'>
-                    <thead>
-                      <tr>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {character.attacks.map((attack, i) => (
-                        <tr
-                          className={attack.isEditing && 'editable'}
-                          key={`attack-edit-${i}`}
-                        >
                           <td>
                             <a data-attack-id={i} onClick={this.onToggleEditing}>
                               {attack.isEditing ? 'Save' : 'Edit'}
@@ -1249,6 +1196,13 @@ export default class CharacterSheet extends Component {
                           </td>
                         </tr>
                       ))}
+                      <tr>
+                        <td colSpan={3} className='add'>
+                          <a onClick={this.onAddAttack}>
+                            + Add Item
+                          </a>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -1263,6 +1217,7 @@ export default class CharacterSheet extends Component {
                       <tr>
                         <td>Name</td>
                         <td>Weight</td>
+                        <td></td>
                       </tr>
                     </thead>
                     <tbody>
@@ -1297,30 +1252,6 @@ export default class CharacterSheet extends Component {
                           ) : (
                             <td>{parseFloat(equipment.weight, 10).toFixed(1)}</td>
                           )}
-                        </tr>
-                      ))}
-                      <tr>
-                        <td colSpan={3} className='add'>
-                          <a onClick={this.onAddEquipment}>
-                            + Add Item
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <table cellPadding={0} cellSpacing={0} className='edit'>
-                    <thead>
-                      <tr>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {character.equipment.map((equipment, i) => (
-                        <tr
-                          className={equipment.isEditing && 'editable'}
-                          key={`equipment-edit-${i}`}
-                        >
                           <td>
                             <a data-equipment-id={i} onClick={this.onToggleEditing}>
                               {equipment.isEditing ? 'Save' : 'Edit'}
@@ -1333,8 +1264,16 @@ export default class CharacterSheet extends Component {
                           </td>
                         </tr>
                       ))}
+                      <tr>
+                        <td colSpan={3} className='add'>
+                          <a onClick={this.onAddEquipment}>
+                            + Add Item
+                          </a>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
+
                 </div>
                 <h4>Equipment</h4>
               </div>
@@ -1907,6 +1846,14 @@ export default class CharacterSheet extends Component {
             cursor: pointer;
             color: ${color.yellow[500]};
             background-color: ${color.grey[700]};
+          }
+
+          .character-sheet table tbody tr:hover a {
+            color: ${color.grey[50]};
+          }
+
+          .character-sheet table tbody tr:hover a:hover {
+            color: ${color.yellow[500]};
           }
 
           .character-sheet table tbody tr.editable:hover {
