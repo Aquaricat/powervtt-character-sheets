@@ -32,7 +32,7 @@ export default {
   dexterity_mod: -2,
   dexterity_prof: false,
   eyes: 'Blue',
-  features_and_traits: 'My features\n\nMy traits\n\nAnd everything that fits in here',
+  features_and_traits: [],
   flaws: 'My one-upsmanship is going to get me in big trouble one of these days.',
   gender: 'Male',
   gm_notes: 'GM Notes',

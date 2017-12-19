@@ -1,109 +1,10 @@
 import React, { Component } from 'react'
 
 import Attribute from './attribute'
+import Feature from './feature'
 import { color } from '../styles'
 
-const attributes = [
-  'Strength',
-  'Dexterity',
-  'Constitution',
-  'Intelligence',
-  'Wisdom',
-  'Charisma'
-]
-
-const skills = [
-  {
-    "code": "acrobatics",
-    "name": "Acrobatics",
-    "type": "Dexterity"
-  },
-  {
-    "code": "animal_handling",
-    "name": "Animal Handling",
-    "type": "Wisdom"
-  },
-  {
-    "code": "arcana",
-    "name": "Arcana",
-    "type": "Intelligence"
-  },
-  {
-    "code": "athletics",
-    "name": "Athletics",
-    "type": "Strength"
-  },
-  {
-    "code": "deception",
-    "name": "Deception",
-    "type": "Charisma"
-  },
-  {
-    "code": "history",
-    "name": "History",
-    "type": "Intelligence"
-  },
-  {
-    "code": "insight",
-    "name": "Insight",
-    "type": "Wisdom"
-  },
-  {
-    "code": "intimidation",
-    "name": "Intimidation",
-    "type": "Charisma"
-  },
-  {
-    "code": "investigation",
-    "name": "Investigation",
-    "type": "Intelligence"
-  },
-  {
-    "code": "medicine",
-    "name": "Medicine",
-    "type": "Wisdom"
-  },
-  {
-    "code": "nature",
-    "name": "Nature",
-    "type": "Intelligence"
-  },
-  {
-    "code": "perception",
-    "name": "Perception",
-    "type": "Wisdom"
-  },
-  {
-    "code": "performance",
-    "name": "Performance",
-    "type": "Charisma"
-  },
-  {
-    "code": "persuasion",
-    "name": "Persuasion",
-    "type": "Charisma"
-  },
-  {
-    "code": "religion",
-    "name": "Religion",
-    "type": "Intelligence"
-  },
-  {
-    "code": "sleight_of_hand",
-    "name": "Sleight of Hand",
-    "type": "Dexterity"
-  },
-  {
-    "code": "stealth",
-    "name": "Stealth",
-    "type": "Dexterity"
-  },
-  {
-    "code": "survival",
-    "name": "Survival",
-    "type": "Wisdom"
-  }
-]
+import { attributes, skills } from './data'
 
 export default class CharacterSheet extends Component {
   constructor (props) {
@@ -111,6 +12,7 @@ export default class CharacterSheet extends Component {
 
     this.onAddAttack = this.onAddAttack.bind(this)
     this.onAddEquipment = this.onAddEquipment.bind(this)
+    this.onAddFeature = this.onAddFeature.bind(this)
     this.onAddProficiency = this.onAddProficiency.bind(this)
     this.onAddTool = this.onAddTool.bind(this)
     this.onChange = this.onChange.bind(this)
@@ -171,6 +73,24 @@ export default class CharacterSheet extends Component {
     }
   }
 
+  onAddFeature () {
+    if (this.props.onUpdateAttribute) {
+      this.props.onUpdateAttribute(
+        'features_and_traits',
+        [
+          ...this.props.character.features_and_traits,
+          {
+            isEditing: true,
+            name: '',
+            source: 'Racial',
+            type: '',
+            description: '',
+          },
+        ],
+      )
+    }
+  }
+
   onAddProficiency () {
     if (this.props.onUpdateAttribute) {
       this.props.onUpdateAttribute(
@@ -212,6 +132,7 @@ export default class CharacterSheet extends Component {
     const equipmentId = e.target.getAttribute('data-equipment-id')
     const toolId = e.target.getAttribute('data-tool-id')
     const otherId = e.target.getAttribute('data-other-id')
+    const featureId = e.target.getAttribute('data-feature-id')
 
     let data = undefined
     let attribute = undefined
@@ -249,6 +170,16 @@ export default class CharacterSheet extends Component {
         ...prof,
         type: i === id && attr === 'type' ? value : prof.type,
         proficiency: i === id && attr === 'proficiency' ? value : prof.proficiency,
+      }))
+    } else if (featureId !== null) {
+      const id = ~~featureId
+      attribute = 'features_and_traits'
+      data = this.props.character.features_and_traits.map((feat, i) => ({
+        ...feat,
+        type: i === id && attr === 'type' ? value : feat.type,
+        source: i === id && attr === 'source' ? value : feat.source,
+        name: i === id && attr === 'name' ? value : feat.name,
+        description: i === id && attr === 'description' ? value : feat.description,
       }))
     }
 
@@ -316,6 +247,7 @@ export default class CharacterSheet extends Component {
     const equipmentId = e.target.getAttribute('data-equipment-id')
     const toolId = e.target.getAttribute('data-tool-id')
     const otherId = e.target.getAttribute('data-other-id')
+    const featureId = e.target.getAttribute('data-feature-id')
 
     let data = undefined
     let attribute = undefined
@@ -346,6 +278,13 @@ export default class CharacterSheet extends Component {
       data = this.props.character.other_profs_and_langs.map((prof, i) => ({
         ...prof,
         isEditing: i === id ? !prof.isEditing : prof.isEditing,
+      }))
+    } else if (featureId !== null) {
+      const id = ~~featureId
+      attribute = 'features_and_traits'
+      data = this.props.character.features_and_traits.map((feat, i) => ({
+        ...feat,
+        isEditing: i === id ? !feat.isEditing : feat.isEditing,
       }))
     }
 
@@ -399,8 +338,6 @@ export default class CharacterSheet extends Component {
       isEditing,
       isNPC,
     } = this.state
-
-    const roll1d20 = '2d20'
 
     return (
       <div className='character-sheet'>
@@ -663,7 +600,7 @@ export default class CharacterSheet extends Component {
                         <span key={`npc-saving-throw-${attr}`}>
                           <a
                             onClick={runMacro}
-                            data-macro={`!r ${roll1d20}+@me.${attr.toLowerCase()}_mod "${attr} Save"`}
+                            data-macro={`!r 1d20+@me.${attr.toLowerCase()}_mod "${attr} Save"`}
                             data-as={character.key}
                           >
                             {attr.slice(0, 3)} +{character[`${attr.toLowerCase()}_mod`]}
@@ -676,7 +613,7 @@ export default class CharacterSheet extends Component {
                         <span key={`npc-skill-${skill.name}`}>
                           <a
                             onClick={runMacro}
-                            data-macro={`!r ${roll1d20}+@me.${skill.code} "${skill.name}"`}
+                            data-macro={`!r 1d20+@me.${skill.code} "${skill.name}"`}
                             data-as={character.key}
                           >
                             {skill.name} +{character[skill.code]}
@@ -745,7 +682,7 @@ export default class CharacterSheet extends Component {
                     <div key={`attr-${attr}`} className='attribute'>
                       <span
                         onClick={runMacro}
-                        data-macro={`!r ${roll1d20}+@me.${attr.toLowerCase()}_mod "${attr}"`}
+                        data-macro={`!r 1d20+@me.${attr.toLowerCase()}_mod "${attr}"`}
                         data-as={character.key}
                       >
                         {attr}
@@ -800,7 +737,6 @@ export default class CharacterSheet extends Component {
                         key={`saving-throw-${attr}`}
                         onChange={onChange}
                         runMacro={runMacro}
-                        roll1d20={roll1d20}
                         score={character[`${attr.toLowerCase()}_mod`]}
                         isSave={true}
                       />
@@ -818,7 +754,6 @@ export default class CharacterSheet extends Component {
                         key={`attribute-${skill.name}`}
                         onChange={onChange}
                         runMacro={runMacro}
-                        roll1d20={roll1d20}
                         score={character[`${skill.type.toLowerCase()}_mod`] || 0}
                         type={skill.type}
                       />
@@ -862,7 +797,7 @@ export default class CharacterSheet extends Component {
                           className={tool.isEditing && 'editable'}
                           key={`tool-proficiency-${i}`}
                           onClick={!tool.isEditing ? runMacro : undefined}
-                          data-macro={`!r ${roll1d20}+@me.${tool.attribute.toLowerCase()}+${tool.mod || 0} "${tool.name}"`}
+                          data-macro={`!r 1d20+@me.${tool.attribute.toLowerCase()}+${tool.mod || 0} "${tool.name}"`}
                           data-as={character.key}
                         >
                           <td>
@@ -1082,7 +1017,7 @@ export default class CharacterSheet extends Component {
 
                   <h4
                     onClick={runMacro}
-                    data-macro={`!r ${roll1d20}+@me.dexterity "Initiative"`}
+                    data-macro={`!r 1d20+@me.dexterity "Initiative"`}
                     data-as={character.key}
                     className='macro'
                   >
@@ -1467,14 +1402,22 @@ export default class CharacterSheet extends Component {
                 </h4>
               </div>
 
-              <div className='attribute'>
-                <textarea
-                  onChange={onChange}
-                  rows={10}
-                  name='features_and_traits'
-                  defaultValue={character.features_and_traits}
-                />
+              <div className='attribute features-and-traits'>
                 <h4>Features &amp; Traits</h4>
+                {character.features_and_traits.map((feature, i) => (
+                  <Feature
+                    {...feature}
+                    i={i}
+                    onChange={this.onChange}
+                    onToggleEditing={this.onToggleEditing}
+                    runMacro={runMacro}
+                  />
+                ))}
+                <div className='add'>
+                  <a onClick={this.onAddFeature}>
+                    + Add Item
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -1995,6 +1938,11 @@ export default class CharacterSheet extends Component {
             font-size: 11px;
             color: ${color.grey[400]};
             transition: color 0.15s ease-out;
+          }
+
+          .character-sheet .add:hover a {
+            color: ${color.yellow[500]};
+            cursor: pointer;
           }
 
           .character-sheet table.edit {

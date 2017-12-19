@@ -14,7 +14,6 @@ export default class Attribute extends Component {
       character,
       code,
       isSave,
-      roll1d20,
       score,
     } = props
 
@@ -22,8 +21,8 @@ export default class Attribute extends Component {
     const save = isSave ? ' Save' : ''
     this.state = {
       macro: isProficient 
-        ? `!r ${roll1d20}+@me.${code}+@me.proficiency_bonus "${attribute}${save} (+${character.proficiency_bonus || 0} Proficient)"`
-        : `!r ${roll1d20}+@me.${code} "${attribute}${save}"`,
+        ? `!r 1d20+@me.${code}+@me.proficiency_bonus "${attribute}${save} (+${character.proficiency_bonus || 0} Proficient)"`
+        : `!r 1d20+@me.${code} "${attribute}${save}"`,
       score: isProficient
         ? score + character.proficiency_bonus
         : score
@@ -48,8 +47,8 @@ export default class Attribute extends Component {
     const save = isSave ? ' Save' : ''
     const state = {
       macro: isProficient 
-        ? `!r ${roll1d20}+@me.${code}+@me.proficiency_bonus "${attribute}${save} (+${character.proficiency_bonus || 0} Proficient)"`
-        : `!r ${roll1d20}+@me.${code} "${attribute}${save}"`,
+        ? `!r 1d20+@me.${code}+@me.proficiency_bonus "${attribute}${save} (+${character.proficiency_bonus || 0} Proficient)"`
+        : `!r 1d20+@me.${code} "${attribute}${save}"`,
       score: isProficient
         ? score + character.proficiency_bonus
         : score 
