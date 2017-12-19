@@ -802,11 +802,12 @@ export default class CharacterSheet extends Component {
                         <tr
                           className={tool.isEditing && 'editable'}
                           key={`tool-proficiency-${i}`}
-                          onClick={!tool.isEditing ? runMacro : undefined}
-                          data-macro={`!r 1d20+@me.${tool.attribute.toLowerCase()}+${tool.mod || 0} "${tool.name}"`}
-                          data-as={character.key}
                         >
-                          <td>
+                          <td
+                            onClick={!tool.isEditing ? runMacro : undefined}
+                            data-macro={`!r 1d20+@me.${tool.attribute.toLowerCase()}+${tool.mod || 0} "${tool.name}"`}
+                            data-as={character.key}
+                          >
                             {tool.isEditing ? (
                               <input
                                 data-tool-id={i}
@@ -818,7 +819,11 @@ export default class CharacterSheet extends Component {
                               />
                             ) : tool.name}
                           </td>
-                          <td>
+                          <td
+                            onClick={!tool.isEditing ? runMacro : undefined}
+                            data-macro={`!r 1d20+@me.${tool.attribute.toLowerCase()}+${tool.mod || 0} "${tool.name}"`}
+                            data-as={character.key}
+                          >
                             {tool.isEditing ? (
                               <select
                                 data-tool-id={i}
@@ -859,7 +864,11 @@ export default class CharacterSheet extends Component {
                               />
                             </td>
                           ) : (
-                            <td>{tool.attribute}</td>
+                          <td
+                            onClick={!tool.isEditing ? runMacro : undefined}
+                            data-macro={`!r 1d20+@me.${tool.attribute.toLowerCase()}+${tool.mod || 0} "${tool.name}"`}
+                            data-as={character.key}
+                          >{tool.attribute}</td>
                           )}
                           <td>
                             <a data-tool-id={i} onClick={this.onToggleEditing}>
@@ -1138,11 +1147,12 @@ export default class CharacterSheet extends Component {
                         <tr
                           className={attack.isEditing && 'editable'}
                           key={`attack-${i}`}
-                          onClick={!attack.isEditing ? runMacro : undefined}
-                          data-macro={`!r 1d6+@me.${attack.attribute}+${attack.mod || 0} "${attack.name}"`}
-                          data-as={character.key}
                         >
-                          <td>
+                          <td
+                            onClick={!attack.isEditing ? runMacro : undefined}
+                            data-macro={`!r 1d6+@me.${attack.attribute}+${attack.mod || 0} "${attack.name}"`}
+                            data-as={character.key}
+                          >
                             {attack.isEditing ? (
                               <input
                                 data-attack-id={i}
@@ -1182,7 +1192,11 @@ export default class CharacterSheet extends Component {
                               />
                             </td>
                           ) : (
-                            <td>{attack.attribute} + {attack.mod}</td>
+                          <td
+                            onClick={runMacro}
+                            data-macro={`!r 1d6+@me.${attack.attribute}+${attack.mod || 0} "${attack.name}"`}
+                            data-as={character.key}
+                          >{attack.attribute} + {attack.mod}</td>
                           )}
                           <td>
                             <a data-attack-id={i} onClick={this.onToggleEditing}>
@@ -1840,6 +1854,10 @@ export default class CharacterSheet extends Component {
 
           .character-sheet table tbody tr {
             transition: background 0.15s ease-out;
+          }
+
+          .character-sheet table tbody tr a {
+            color: ${color.grey[50]};
           }
 
           .character-sheet table tbody tr:hover {
