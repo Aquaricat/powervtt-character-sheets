@@ -831,7 +831,6 @@ export default class CharacterSheet extends Component {
                         onChange={onChange}
                         runMacro={runMacro}
                         roll1d20={roll1d20}
-                        isSave={true}
                         score={character[`${skill.type.toLowerCase()}_mod`] || 0}
                         type={skill.type}
                       />

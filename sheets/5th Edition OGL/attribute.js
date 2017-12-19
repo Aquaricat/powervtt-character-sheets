@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { color } from '../styles'
 
 export default class Attribute extends Component {
   constructor (props) {
@@ -73,7 +74,7 @@ export default class Attribute extends Component {
     } = this.props
 
     return (
-      <div>
+      <div className='attr'>
         <input
           type='checkbox'
           onChange={onChange}
@@ -87,6 +88,29 @@ export default class Attribute extends Component {
         >
           <strong>{this.state.score}</strong> {attribute} {type && (<span className='skill-type'>({type.slice(0, 3)})</span>)}
         </label>
+        <style jsx>{`
+          .attr {
+            transition: color 0.15s ease-out;
+            cursor: pointer;
+            color: ${color.grey[50]};
+            font-size: 14px;
+          }
+
+          .attr:hover {
+            color: ${color.yellow[500]};
+          }
+
+          .attr span {
+            color: ${color.grey[50]};
+            font-size: 14px;
+            transition: color 0.15s ease-out;
+          }
+
+          .attr input {
+            text-align: center;
+            border-bottom: 0;
+          }
+        `}</style>
       </div>
     )
   }
