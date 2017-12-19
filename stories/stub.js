@@ -17,6 +17,14 @@ export default function withStub (Child) {
     }
 
     onChange (e) {
+      const attributes = [
+        'strength',
+        'dexterity',
+        'constitution',
+        'intelligence',
+        'wisdom',
+        'charisma'
+      ]
       const attr = e.target.name
       let value = e.target.value
 
@@ -39,6 +47,8 @@ export default function withStub (Child) {
         } else if (value >= 7) {
           state.proficiency_bonus = 3
         }
+      } else if (attributes.indexOf(attr) >= 0) {
+        state[`${attr}_mod`] = Math.floor((value - 10) / 2)
       }
 
       this.setState(state)

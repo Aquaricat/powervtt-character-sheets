@@ -758,20 +758,20 @@ export default class CharacterSheet extends Component {
                       </span>
 
                       <input
-                        defaultValue={character[attr.toLowerCase()]}
-                        name={attr.toLowerCase()}
-                        onChange={onChange}
-                        className='large'
+                        value={`${character[attr.toLowerCase() + '_mod']}`}
+                        name={`${attr.toLowerCase()}_mod`}
                         placeholder='0'
+                        disabled={true}
                         type='number'
+                        className='large'
                       />
 
                       <div className='mod'>
                         <input
-                          defaultValue={`${character[attr.toLowerCase() + '_mod']}`}
-                          name={`${attr.toLowerCase()}_mod`}
-                          placeholder='0'
+                          defaultValue={character[attr.toLowerCase()]}
+                          name={attr.toLowerCase()}
                           onChange={onChange}
+                          placeholder='0'
                           type='number'
                         />
                       </div>
@@ -896,7 +896,7 @@ export default class CharacterSheet extends Component {
                               >
                                 <option value={0}>Proficient</option>
                                 <option value={1}>Expertise</option>
-                                <option value={2}>Jack of all Trades</option>
+                                <option value={2}>Not Proficient</option>
                               </select>
                             ) : tool.mod}
                           </td>
