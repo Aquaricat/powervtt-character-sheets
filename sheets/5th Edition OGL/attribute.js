@@ -86,14 +86,17 @@ export default class Attribute extends Component {
           data-macro={this.state.macro}
           data-as={character.key}
         >
-          <strong>{this.state.score}</strong> {attribute} {type && (<span className='skill-type'>({type.slice(0, 3)})</span>)}
+          <strong>{this.state.score >= 0 && '+'}{this.state.score}</strong> {attribute} {type && (<span className='skill-type'>({type.slice(0, 3)})</span>)}
         </label>
         <style jsx>{`
           .attr {
             transition: color 0.15s ease-out;
+            display: flex;
+            align-items: center;
             cursor: pointer;
-            color: ${color.grey[50]};
-            font-size: 14px;
+            margin-bottom: 2px;
+            color: ${color.grey[500]};
+            font-size: 13px;
           }
 
           .attr:hover {
@@ -101,8 +104,8 @@ export default class Attribute extends Component {
           }
 
           .attr span {
-            color: ${color.grey[50]};
-            font-size: 14px;
+            color: ${color.grey[600]};
+            font-size: 12px;
             transition: color 0.15s ease-out;
           }
 

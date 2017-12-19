@@ -400,8 +400,7 @@ export default class CharacterSheet extends Component {
       isNPC,
     } = this.state
 
-    // If we have advantage, we tend to roll 2d20kh1 for most rolls, so we just store it here
-    const roll1d20 = isAdvantage ? '2d20kh1' : '1d20'
+    const roll1d20 = '2d20'
 
     return (
       <div className='character-sheet'>
@@ -622,17 +621,6 @@ export default class CharacterSheet extends Component {
               </li>
             )}
           </ul>
-
-          <span className='toggle'>
-            <span>
-              Advantage {isAdvantage ? 'ON' : 'Off'}
-            </span>
-
-            <Toggle
-              onClick={this.onToggleAdvantage}
-              isOn={isAdvantage}
-            />
-          </span>
         </div>
         )}
 
@@ -2086,44 +2074,3 @@ export default class CharacterSheet extends Component {
     )
   }
 }
-
-const Toggle = ({ isOn, onClick }) => (
-  <div className={`toggler ${isOn && 'on'}`} onClick={onClick}>
-    <span />
-
-    <style jsx>{`
-      .toggler {
-        background-color: ${color.grey[700]};
-        border-radius: 24px;
-        width: 48px;
-        display: flex;
-        padding: 0;
-        margin: 0;
-        align-items: center;
-        transition: background 0.15s ease-out;
-      }
-
-      .toggler span {
-        background-color: ${color.yellow[500]};
-        display: block;
-        border-radius: 24px;
-        transition: all 0.15s ease-out;
-        height: 24px;
-        width: 24px;
-      }
-
-      .toggler span:hover {
-        opacity: 0.7;
-        cursor: pointer;
-      }
-
-      .on {
-        background-color: ${color.grey[900]};
-      }
-
-      .on span {
-        margin-left: 24px;
-      }
-    `}</style>
-  </div>
-)
