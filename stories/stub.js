@@ -49,6 +49,8 @@ export default function withStub (Child) {
         }
       } else if (attributes.indexOf(attr) >= 0) {
         state[`${attr}_mod`] = Math.floor((value - 10) / 2)
+      } else if (attr === 'hp' && value > (this.state.hp_max || 0)) {
+        state.hp = this.state.hp_max
       }
 
       this.setState(state)

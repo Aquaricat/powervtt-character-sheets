@@ -130,6 +130,12 @@ export default class CharacterSheet extends Component {
     }
   }
 
+  componentWillReceiveProps (props) {
+    if (Number(props.character.hp) !== this.props.character.hp) {
+      this.refs.hp.value = props.character.hp
+    }
+  }
+
   onAddAttack () {
     if (this.props.onUpdateAttribute) {
       this.props.onUpdateAttribute(
@@ -1129,6 +1135,7 @@ export default class CharacterSheet extends Component {
                 <input
                   defaultValue={character.hp}
                   name='hp'
+                  ref='hp'
                   onChange={onChange}
                   className='large'
                   placeholder='0'
