@@ -44,7 +44,7 @@ export default function withStub (Child) {
           state.proficiency_bonus = 5 
         } else if (value >= 9) {
           state.proficiency_bonus = 4
-        } else if (value >= 7) {
+        } else if (value >= 5) {
           state.proficiency_bonus = 3
         }
       } else if (attributes.indexOf(attr) >= 0) {
