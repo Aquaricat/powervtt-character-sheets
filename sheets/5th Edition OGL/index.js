@@ -807,7 +807,14 @@ export default class CharacterSheet extends Component {
                         >
                           <td
                             onClick={!tool.isEditing ? runMacro : undefined}
-                            data-macro={`!r 1d20+@me.${tool.attribute.toLowerCase()}+${tool.mod || 0} "${tool.name}"`}
+                            data-macro={
+                              tool.bonus == 0
+                                ? `!r 1d20+@me.${tool.attribute.toLowerCase()}_mod+@me.proficiency_bonus+${tool.mod || 0} "${tool.name} (+${character.proficiency_bonus} Proficiency)"`
+                                : (tool.bonus == 1
+                                  ? `$bonus = @me.proficiency_bonus * 2 | !r 1d20+@me.${tool.attribute.toLowerCase()}_mod+$bonus+${tool.mod || 0} "${tool.name} (+${(Number(character.proficiency_bonus) || 0) * 2} Proficiency)"`
+                                  : `!r 1d20+@me.${tool.attribute.toLowerCase()}_mod+${tool.mod || 0} "${tool.name}"`
+                                )
+                            }
                             data-as={character.key}
                           >
                             {tool.isEditing ? (
@@ -823,7 +830,14 @@ export default class CharacterSheet extends Component {
                           </td>
                           <td
                             onClick={!tool.isEditing ? runMacro : undefined}
-                            data-macro={`!r 1d20+@me.${tool.attribute.toLowerCase()}+${tool.mod || 0} "${tool.name}"`}
+                            data-macro={
+                              tool.bonus == 0
+                                ? `!r 1d20+@me.${tool.attribute.toLowerCase()}_mod+@me.proficiency_bonus+${tool.mod || 0} "${tool.name} (+${character.proficiency_bonus} Proficiency)"`
+                                : (tool.bonus == 1
+                                  ? `$bonus = @me.proficiency_bonus * 2 | !r 1d20+@me.${tool.attribute.toLowerCase()}_mod+$bonus+${tool.mod || 0} "${tool.name} (+${(Number(character.proficiency_bonus) || 0) * 2} Proficiency)"`
+                                  : `!r 1d20+@me.${tool.attribute.toLowerCase()}_mod+${tool.mod || 0} "${tool.name}"`
+                                )
+                            }
                             data-as={character.key}
                           >
                             {tool.isEditing ? (
@@ -839,7 +853,13 @@ export default class CharacterSheet extends Component {
                                 <option value={1}>Expertise</option>
                                 <option value={2}>Not Proficient</option>
                               </select>
-                            ) : tool.mod}
+                              ) : (
+                                <span>
+                                  {tool.bonus == 0 && 'Proficient'}
+                                  {tool.bonus == 1 && 'Expertise'}
+                                  {tool.bonus == 2 && 'Not Proficient'}
+                                </span>
+                              )}
                           </td>
                           {tool.isEditing ? (
                             <td style={{ width: '124px' }} className='flex'>
@@ -868,9 +888,16 @@ export default class CharacterSheet extends Component {
                           ) : (
                           <td
                             onClick={!tool.isEditing ? runMacro : undefined}
-                            data-macro={`!r 1d20+@me.${tool.attribute.toLowerCase()}+${tool.mod || 0} "${tool.name}"`}
+                            data-macro={
+                              tool.bonus == 0
+                                ? `!r 1d20+@me.${tool.attribute.toLowerCase()}_mod+@me.proficiency_bonus+${tool.mod || 0} "${tool.name} (+${character.proficiency_bonus} Proficiency)"`
+                                : (tool.bonus == 1
+                                  ? `$bonus = @me.proficiency_bonus * 2 | !r 1d20+@me.${tool.attribute.toLowerCase()}_mod+$bonus+${tool.mod || 0} "${tool.name} (+${(Number(character.proficiency_bonus) || 0) * 2} Proficiency)"`
+                                  : `!r 1d20+@me.${tool.attribute.toLowerCase()}_mod+${tool.mod || 0} "${tool.name}"`
+                                )
+                            }
                             data-as={character.key}
-                          >{tool.attribute}</td>
+                          >{tool.attribute}{tool.mod != 0 && `+${tool.mod}`}</td>
                           )}
                           <td>
                             <a data-tool-id={i} onClick={this.onToggleEditing}>
