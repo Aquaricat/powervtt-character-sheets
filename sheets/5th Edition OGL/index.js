@@ -852,12 +852,14 @@ export default class CharacterSheet extends Component {
                                 <option value={0}>Proficient</option>
                                 <option value={1}>Expertise</option>
                                 <option value={2}>Not Proficient</option>
+                                <option value={3}>Jack of all Trades</option>
                               </select>
                               ) : (
                                 <span>
                                   {tool.bonus == 0 && 'Proficient'}
                                   {tool.bonus == 1 && 'Expertise'}
                                   {tool.bonus == 2 && 'Not Proficient'}
+                                  {tool.bonus == 3 && 'Jack of all Trades'}
                                 </span>
                               )}
                           </td>
