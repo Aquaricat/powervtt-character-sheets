@@ -775,7 +775,7 @@ export default class CharacterSheet extends Component {
               <div className='proficiency'>
                 <div className='bonus'>
                   <input
-                    defaultValue={character.passive_wisdom}
+                    defaultValue={(Number(character.passive_wisdom) || 0) + (Number(character.wisdom_mod) || 0)}
                     name='passive_wisdom'
                     placeholder='0'
                     onChange={onChange}
