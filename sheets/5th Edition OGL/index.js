@@ -36,6 +36,12 @@ export default class CharacterSheet extends Component {
     if (Number(props.character.hp) !== this.props.character.hp) {
       this.refs.hp.value = props.character.hp
     }
+
+    if (props.character.is_npc !== this.state.isNPC) {
+      this.setState({
+        isNPC: props.character.is_npc,
+      })
+    }
   }
 
   onAddAttack () {
@@ -309,7 +315,7 @@ export default class CharacterSheet extends Component {
         isNPC: false,
       })
       if (this.props.onUpdateAttribute) {
-        this.props.onUpdateAttribute('isNPC', false)
+        this.props.onUpdateAttribute('is_npc', false)
       }
     }
   }
@@ -325,7 +331,7 @@ export default class CharacterSheet extends Component {
         isNPC: true,
       })
       if (this.props.onUpdateAttribute) {
-        this.props.onUpdateAttribute('isNPC', true)
+        this.props.onUpdateAttribute('is_npc', true)
       }
     }
   }
