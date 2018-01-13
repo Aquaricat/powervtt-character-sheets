@@ -1321,6 +1321,68 @@ export default class CharacterSheet extends Component {
 
                 </div>
                 <h4>Equipment</h4>
+
+                <div className='currency'>
+                  <div className='attribute'>
+                    <input
+                      defaultValue={character.cp}
+                      name='cp'
+                      onChange={onChange}
+                      placeholder='0'
+                      type='number'
+                    />
+
+                    <h4>CP</h4>
+                  </div>
+
+                  <div className='attribute'>
+                    <input
+                      defaultValue={character.sp}
+                      name='sp'
+                      onChange={onChange}
+                      placeholder='0'
+                      type='number'
+                    />
+
+                    <h4>SP</h4>
+                  </div>
+
+                  <div className='attribute'>
+                    <input
+                      defaultValue={character.gp}
+                      name='gp'
+                      onChange={onChange}
+                      placeholder='0'
+                      type='number'
+                    />
+
+                    <h4>GP</h4>
+                  </div>
+
+                  <div className='attribute'>
+                    <input
+                      defaultValue={character.ep}
+                      name='ep'
+                      onChange={onChange}
+                      placeholder='0'
+                      type='number'
+                    />
+
+                    <h4>EP</h4>
+                  </div>
+
+                  <div className='attribute'>
+                    <input
+                      defaultValue={character.pp}
+                      name='pp'
+                      onChange={onChange}
+                      placeholder='0'
+                      type='number'
+                    />
+
+                    <h4>PP</h4>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -2018,6 +2080,17 @@ export default class CharacterSheet extends Component {
 
           .character-sheet .stat strong {
             display: block;
+          }
+
+          .currency {
+            border-top: 1px solid ${color.grey[700]};
+            margin-top: 12px;
+            padding-top: 0px;
+            display: flex;
+          }
+
+          .currency .attribute {
+            border: 0;
           }
         `}</style>
       </div>
