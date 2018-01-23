@@ -920,8 +920,8 @@ export default class CharacterSheet extends Component {
                         </tr>
                       ))}
                       <tr>
-                        <td colSpan={3} className='add'>
-                          <a onClick={this.onAddTool}>
+                        <td onClick={this.onAddTool} colSpan={3} className='add'>
+                          <a>
                             + Add Item
                           </a>
                         </td>
@@ -994,8 +994,8 @@ export default class CharacterSheet extends Component {
                         </tr>
                       ))}
                       <tr>
-                        <td colSpan={3} className='add'>
-                          <a onClick={this.onAddProficiency}>
+                        <td onClick={this.onAddProficiency} colSpan={3} className='add'>
+                          <a>
                             + Add Item
                           </a>
                         </td>
@@ -1248,8 +1248,8 @@ export default class CharacterSheet extends Component {
                         </tr>
                       ))}
                       <tr>
-                        <td colSpan={3} className='add'>
-                          <a onClick={this.onAddAttack}>
+                        <td onClick={this.onAddAttack} colSpan={3} className='add'>
+                          <a>
                             + Add Item
                           </a>
                         </td>
@@ -1316,8 +1316,8 @@ export default class CharacterSheet extends Component {
                         </tr>
                       ))}
                       <tr>
-                        <td colSpan={3} className='add'>
-                          <a onClick={this.onAddEquipment}>
+                        <td onClick={this.onAddEquipment} colSpan={3} className='add'>
+                          <a>
                             + Add Item
                           </a>
                         </td>
@@ -1471,8 +1471,8 @@ export default class CharacterSheet extends Component {
                     runMacro={runMacro}
                   />
                 ))}
-                <div className='add'>
-                  <a onClick={this.onAddFeature}>
+                <div onClick={this.onAddFeature} className='add'>
+                  <a>
                     + Add Item
                   </a>
                 </div>
@@ -2008,6 +2008,10 @@ export default class CharacterSheet extends Component {
             font-size: 11px;
             color: ${color.grey[400]};
             transition: color 0.15s ease-out;
+          }
+
+          .character-sheet .add:hover {
+            cursor: pointer;
           }
 
           .character-sheet .add:hover a {
