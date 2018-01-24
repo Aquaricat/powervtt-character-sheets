@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
 import Attribute from './attribute'
 import Feature from './feature'
+import Attack from './attack'
 import { color } from '../styles'
 
 import { attributes, skills } from './data'
@@ -1170,92 +1171,21 @@ export default class CharacterSheet extends Component {
               </div>
 
               <div className='list attacks'>
-                <div className='tables flex'>
-                  <table cellPadding={0} cellSpacing={0}>
-                    <thead>
-                      <tr>
-                        <td>Name</td>
-                        <td>Attack</td>
-                        <td></td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {character.attacks.map((attack, i) => (
-                        <tr
-                          className={attack.isEditing && 'editable'}
-                          key={`attack-${i}`}
-                        >
-                          <td
-                            onClick={!attack.isEditing ? runMacro : undefined}
-                            data-macro={`!r 1d6+@me.${attack.attribute}+${attack.mod || 0} "${attack.name}"`}
-                            data-as={character.key}
-                          >
-                            {attack.isEditing ? (
-                              <input
-                                data-attack-id={i}
-                                type='text'
-                                placeholder='Name'
-                                name='name'
-                                onChange={this.onChange}
-                                defaultValue={attack.name}
-                                style={{ minWidth: 198 }}
-                              />
-                            ) : attack.name}
-                          </td>
-                          {attack.isEditing ? (
-                            <td style={{ width: '196px' }} className='flex'>
-                              <select
-                                data-attack-id={i}
-                                type='text'
-                                placeholder=''
-                                name='attribute'
-                                onChange={this.onChange}
-                                defaultValue={attack.attribute}
-                              >
-                                {attributes.map((attr) => (
-                                  <option key={`attack-attr-${attr}`} value={attr}>{attr}</option>
-                                ))}
-                              </select>
-
-                              +&nbsp;
-
-                              <input
-                                data-attack-id={i}
-                                type='number'
-                                placeholder='Mod'
-                                name='mod'
-                                defaultValue={attack.mod}
-                                onChange={this.onChange}
-                              />
-                            </td>
-                          ) : (
-                          <td
-                            onClick={runMacro}
-                            data-macro={`!r 1d6+@me.${attack.attribute}+${attack.mod || 0} "${attack.name}"`}
-                            data-as={character.key}
-                          >{attack.attribute} + {attack.mod}</td>
-                          )}
-                          <td>
-                            <a data-attack-id={i} onClick={this.onToggleEditing}>
-                              {attack.isEditing ? 'Save' : 'Edit'}
-                            </a>
-                            {attack.isEditing && (
-                              <a data-attack-id={i} onClick={this.onRemoveTool} className='warning'>
-                               Delete 
-                              </a>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                      <tr>
-                        <td onClick={this.onAddAttack} colSpan={3} className='add'>
-                          <a>
-                            + Add Item
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                {character.attacks.map((attack, i) => (
+                  <Attack
+                    {...attack}
+                    i={i}
+                    key={`attack-${i}`}
+                    onChange={this.onChange}
+                    onRemoveTool={this.onRemoveTool}
+                    onToggleEditing={this.onToggleEditing}
+                    runMacro={runMacro}
+                  />
+                ))}
+                <div onClick={this.onAddAttack} className='add'>
+                  <a>
+                    + Add Item
+                  </a>
                 </div>
 
                 <h4>Attacks &amp; Spellcasting</h4>
@@ -1465,6 +1395,7 @@ export default class CharacterSheet extends Component {
                   <Feature
                     {...feature}
                     i={i}
+                    key={`feature-${i}`}
                     onChange={this.onChange}
                     onRemoveTool={this.onRemoveTool}
                     onToggleEditing={this.onToggleEditing}
@@ -2101,6 +2032,17 @@ export default class CharacterSheet extends Component {
 
           .currency .attribute {
             border: 0;
+          }
+
+          .edit-input {
+            display: block;
+            flex: 1;
+            background-color: ${color.grey[900]};
+            border: 0;
+            border-radius: 3px;
+            padding: 6px;
+            color: ${color.grey[50]};
+            margin-top: 3px;
           }
         `}</style>
       </div>

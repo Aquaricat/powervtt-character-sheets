@@ -153,7 +153,7 @@ export default class Feature extends Component {
           label {
             display: block;
             color: ${color.grey[400]};
-            font-size: 14px;
+            font-size: 12px;
             flex: 1;
             padding: 3px;
             flex-direction: column;
