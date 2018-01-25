@@ -1,6 +1,6 @@
 {
   "name": "powervtt-character-sheets",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Character sheets for use in Power Virtual TableTop",
   "main": "index.js",
   "scripts": {
