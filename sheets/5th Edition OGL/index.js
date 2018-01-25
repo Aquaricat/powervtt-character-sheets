@@ -1047,57 +1047,133 @@ export default class CharacterSheet extends Component {
 
                 <div className='attribute'>
                   <input
-                    defaultValue={character.speed}
-                    name='speed'
+                    defaultValue={character.darkvision}
+                    name='darkvision'
                     onChange={onChange}
                     className='large'
                     placeholder='0'
                     type='number'
                   />
 
+                  <h4>Darkvision</h4>
+                </div>
+              </div>
+
+              <div className='col-2'>
+                <div className='attribute attribute-sub'>
+                  <input
+                      defaultValue={character.speed_walking}
+                      name='speed_walking'
+                      onChange={onChange}
+                      className='large'
+                      placeholder='0'
+                      type='number'
+                  />
+
                   <h4>Speed</h4>
                 </div>
+                <div className='attribute attribute-sub'>
+                  <input
+                      defaultValue={character.speed_climbing}
+                      name='speed_climbing'
+                      onChange={onChange}
+                      className='large'
+                      placeholder='0'
+                      type='number'
+                  />
+
+                  <h4>Climb</h4>
+                </div>
+                <div className='attribute attribute-sub'>
+                  <input
+                      defaultValue={character.speed_swimming}
+                      name='speed_swimming'
+                      onChange={onChange}
+                      className='large'
+                      placeholder='0'
+                      type='number'
+                  />
+
+                  <h4>Swim</h4>
+                </div>
+                <div className='attribute attribute-sub'>
+                  <input
+                      defaultValue={character.speed_flying}
+                      name='speed_flying'
+                      onChange={onChange}
+                      className='large'
+                      placeholder='0'
+                      type='number'
+                  />
+
+                  <h4>Fly</h4>
+                </div>
               </div>
 
-              <div className='attribute attribute-sub'>
-                <div className='max'>
-                  <label>
-                    <input
-                      defaultValue={character.hp_max}
-                      name='hp_max'
-                      placeholder='0'
-                      onChange={onChange}
-                      type='number'
-                    />
+              <div className='col-2'>
+                <div className='attribute attribute-sub'>
+                  <div className='max'>
+                    <label>
+                      <input
+                        defaultValue={character.hp_max}
+                        name='hp_max'
+                        placeholder='0'
+                        onChange={onChange}
+                        type='number'
+                      />
 
-                    Hit Point Max
-                  </label>
+                      Hit Point Max
+                    </label>
+                  </div>
+
+                  <input
+                    defaultValue={character.hp}
+                    name='hp'
+                    ref='hp'
+                    onChange={onChange}
+                    className='large'
+                    placeholder='0'
+                    type='number'
+                  />
+
+                  <h4>Current Hit Points</h4>
                 </div>
 
-                <input
-                  defaultValue={character.hp}
-                  name='hp'
-                  ref='hp'
-                  onChange={onChange}
-                  className='large'
-                  placeholder='0'
-                  type='number'
-                />
+                  <div className='attribute attribute-sub'>
+                    <div className='death-saves'>
+                    <div className='col-2'>
+                      <label>
+                        Successes<br />
 
-                <h4>Current Hit Points</h4>
-              </div>
+                        <input
+                            type='checkbox'
+                        />
+                        <input
+                            type='checkbox'
+                        />
+                        <input
+                            type='checkbox'
+                        />
+                      </label>
 
-              <div className='attribute attribute-sub'>
-                <input
-                  defaultValue={character.hp_tmp}
-                  name='hp_tmp'
-                  onChange={onChange}
-                  className='large'
-                  placeholder='0'
-                  type='number'
-                />
+                      <label>
+                        Failures<br />
 
-                <h4>Temporary Hit Points</h4>
+                        <input
+                            type='checkbox'
+                        />
+                        <input
+                            type='checkbox'
+                        />
+                        <input
+                            type='checkbox'
+                        />
+                      </label>
+                    </div>
+                    </div>
+
+                    <h4>Death Saves</h4>
+                  </div>
               </div>
 
               <div className='col-2'>
@@ -1135,37 +1211,29 @@ export default class CharacterSheet extends Component {
                 </div>
 
                 <div className='attribute attribute-sub'>
-                  <div className='death-saves'>
-                    <label>
-                      Successes
+                  <input
+                      defaultValue={character.hp_tmp}
+                      name='hp_tmp'
+                      onChange={onChange}
+                      className='large'
+                      placeholder='0'
+                      type='number'
+                  />
 
-                      <input
-                        type='checkbox'
-                      />
-                      <input
-                        type='checkbox'
-                      />
-                      <input
-                        type='checkbox'
-                      />
-                    </label>
+                  <h4>Temporary HP</h4>
+                </div>
 
-                    <label>
-                      Failures
+                <div className='attribute attribute-sub'>
+                  <input
+                      defaultValue={character.hp_mod}
+                      name='hp_mod'
+                      onChange={onChange}
+                      className='large'
+                      placeholder='0'
+                      type='number'
+                  />
 
-                      <input
-                        type='checkbox'
-                      />
-                      <input
-                        type='checkbox'
-                      />
-                      <input
-                        type='checkbox'
-                      />
-                    </label>
-                  </div>
-
-                  <h4>Death Saves</h4>
+                  <h4>Max HP Mod</h4>
                 </div>
               </div>
 
@@ -1804,11 +1872,12 @@ export default class CharacterSheet extends Component {
           }
 
           .character-sheet .death-saves {
-            padding: 12px 0;
+            padding: 8px 0;
             display: block;
           }
 
           .character-sheet .death-saves label {
+            padding: 0 4px;
             display: block;
           }
 
