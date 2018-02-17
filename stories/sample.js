@@ -101,4 +101,12 @@ export default {
       name: 'Test Tool',
     },
   ],
+  assets: [
+    {
+      name: 'Arrows',
+      current: 45,
+      maximum: 60,
+      isEditing: false,
+    },
+  ],
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import Asset from './asset'
 import Attribute from './attribute'
 import Feature from './feature'
 import { color } from '../styles'
@@ -15,6 +16,8 @@ export default class CharacterSheet extends Component {
     this.onAddFeature = this.onAddFeature.bind(this)
     this.onAddProficiency = this.onAddProficiency.bind(this)
     this.onAddTool = this.onAddTool.bind(this)
+    this.onAddAsset = this.onAddAsset.bind(this)
+    this.onAdjustAsset = this.onAdjustAsset.bind(this)
     this.onChange = this.onChange.bind(this)
     this.onChangeTab = this.onChangeTab.bind(this)
     this.onRemoveTool = this.onRemoveTool.bind(this)
@@ -41,6 +44,23 @@ export default class CharacterSheet extends Component {
       this.setState({
         isNPC: props.character.is_npc,
       })
+    }
+  }
+
+  onAddAsset () {
+    if (this.props.onUpdateAttribute) {
+      this.props.onUpdateAttribute(
+        'assets',
+        [
+          ...this.props.character.assets,
+          {
+            isEditing: true,
+            name: '',
+            current: 0,
+            maximum: 0,
+          },
+        ],
+      )
     }
   }
 
@@ -131,9 +151,26 @@ export default class CharacterSheet extends Component {
     }
   }
 
+  onAdjustAsset (e) {
+    const id = ~~e.target.getAttribute('data-asset-id')
+    let attribute = 'assets'
+    let current = ~~e.target.getAttribute('data-asset-adjust')
+    let data = this.props.character.assets.map((asset, i) => ({
+      ...asset,
+      current: i === id ? current : asset.current,
+      maximum: asset.maximum,
+      name: asset.name,
+    }))
+
+    if (attribute && this.props.onUpdateAttribute) {
+      this.props.onUpdateAttribute(attribute, data)
+    }
+  }
+
   onChange (e) {
     const attr = e.target.name
     const value = e.target.value
+    const assetId = e.target.getAttribute('data-asset-id')
     const attackId = e.target.getAttribute('data-attack-id')
     const equipmentId = e.target.getAttribute('data-equipment-id')
     const toolId = e.target.getAttribute('data-tool-id')
@@ -187,6 +224,15 @@ export default class CharacterSheet extends Component {
         name: i === id && attr === 'name' ? value : feat.name,
         description: i === id && attr === 'description' ? value : feat.description,
       }))
+    } else if (assetId !== null) {
+      const id = ~~assetId
+      attribute = 'assets'
+      data = this.props.character.assets.map((asset, i) => ({
+        ...asset,
+        current: i === id && attr === 'current' ? value : asset.current,
+        maximum: i === id && attr === 'maximum' ? value : asset.maximum,
+        name: i === id && attr === 'name' ? value : asset.name,
+      }))
     }
 
     if (attribute && this.props.onUpdateAttribute) {
@@ -202,6 +248,7 @@ export default class CharacterSheet extends Component {
   }
 
   onRemoveTool (e) {
+    const assetId = e.target.getAttribute('data-asset-id')
     const attackId = e.target.getAttribute('data-attack-id')
     const equipmentId = e.target.getAttribute('data-equipment-id')
     const toolId = e.target.getAttribute('data-tool-id')
@@ -230,6 +277,10 @@ export default class CharacterSheet extends Component {
       const id = ~~featureId
       attribute = 'features_and_traits'
       data = this.props.character.features_and_traits.filter((_, i) => (id !== i))
+    } else if (assetId !== null) {
+      const id = ~~assetId
+      attribute = 'assets'
+      data = this.props.character.assets.filter((_, i) => (id !== i))
     }
 
     if (attribute && this.props.onUpdateAttribute) {
@@ -254,6 +305,7 @@ export default class CharacterSheet extends Component {
   }
 
   onToggleEditing (e) {
+    const assetId = e.target.getAttribute('data-asset-id')
     const attackId = e.target.getAttribute('data-attack-id')
     const equipmentId = e.target.getAttribute('data-equipment-id')
     const toolId = e.target.getAttribute('data-tool-id')
@@ -296,6 +348,13 @@ export default class CharacterSheet extends Component {
       data = this.props.character.features_and_traits.map((feat, i) => ({
         ...feat,
         isEditing: i === id ? !feat.isEditing : feat.isEditing,
+      }))
+    } else if (assetId !== null) {
+      const id = ~~assetId
+      attribute = 'assets'
+      data = this.props.character.assets.map((asset, i) => ({
+        ...asset,
+        isEditing: i === id ? !asset.isEditing : asset.isEditing,
       }))
     }
 
@@ -913,7 +972,7 @@ export default class CharacterSheet extends Component {
                             </a>
                             {tool.isEditing && (
                               <a data-tool-id={i} onClick={this.onRemoveTool} className='warning'>
-                               Delete 
+                               Delete
                               </a>
                             )}
                           </td>
@@ -987,7 +1046,7 @@ export default class CharacterSheet extends Component {
                             </a>
                             {prof.isEditing && (
                               <a data-other-id={i} onClick={this.onRemoveTool} className='warning'>
-                               Delete 
+                               Delete
                               </a>
                             )}
                           </td>
@@ -1309,7 +1368,7 @@ export default class CharacterSheet extends Component {
                             </a>
                             {attack.isEditing && (
                               <a data-attack-id={i} onClick={this.onRemoveTool} className='warning'>
-                               Delete 
+                               Delete
                               </a>
                             )}
                           </td>
@@ -1377,7 +1436,7 @@ export default class CharacterSheet extends Component {
                             </a>
                             {equipment.isEditing && (
                               <a data-equipment-id={i} onClick={this.onRemoveTool} className='warning'>
-                               Delete 
+                               Delete
                               </a>
                             )}
                           </td>
@@ -1499,31 +1558,37 @@ export default class CharacterSheet extends Component {
                 <h4>Flaws</h4>
               </div>
 
-              <div className='attribute attribute-sub'>
-                <div className='max'>
-                  <label>
-                    Total
-
-                    <input
-                      defaultValue={character.classResourceMax}
-                      name='classResourceMax'
-                      placeholder='0'
-                      onChange={onChange}
-                      type='number'
-                    />
-                  </label>
+              <div className='list'>
+                <div className='table'>
+                  <table cellPadding={0} cellSpacing={0}>
+                    <thead>
+                      <tr>
+                        <td>Name</td>
+                        <td>Current</td>
+                        <td>Max</td>
+                        <td></td>
+                      </tr>
+                    </thead>
+                    {character.assets.map((asset, i) => (
+                      <Asset
+                        {...asset}
+                        i={i}
+                        onChange={this.onChange}
+                        onAdjust={this.onAdjustAsset}
+                        onRemoveTool={this.onRemoveTool}
+                        onToggleEditing={this.onToggleEditing}
+                        runMacro={runMacro}
+                      />
+                    ))}
+                  </table>
+                  <div onClick={this.onAddAsset} className='add'>
+                    <a>
+                      + Add Item
+                    </a>
+                  </div>
                 </div>
-                <input
-                  defaultValue={character.classResource}
-                  name='classResource'
-                  onChange={onChange}
-                  className='large'
-                  placeholder='0'
-                  type='number'
-                />
-
                 <h4>
-                  Class Resource
+                  Assets
                 </h4>
               </div>
 
