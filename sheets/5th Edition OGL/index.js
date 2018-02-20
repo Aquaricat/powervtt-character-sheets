@@ -697,6 +697,35 @@ export default class CharacterSheet extends Component {
                     <li><strong>Challenge</strong> {character.challenge} ({character.xp})</li>
                   </ul>
                 </div>
+                {character.actions && character.actions.length > 0 && (
+                  <div className='npc-section'>
+                    <h1 className='npcName'>Actions</h1>
+                    {character.actions.map((action, i) => (
+                    <div
+                      onClick={runMacro}
+                      data-macro={`!template attack ${JSON.stringify(action)}`}
+                      data-as={character.key}
+                      key={`npc-action-${i}`}
+                      className='action'
+                    >
+                      <h2>{action.name}</h2>
+                      <p>{action.description}</p>
+                    </div>
+                    ))}
+                  </div>
+                )}
+
+                {character.legendary_actions && character.legendary_actions.length > 0 && (
+                  <div className='npc-section'>
+                    <h1 className='npcName'>Legendary Actions</h1>
+                    {character.legendary_actions.map((action, i) => (
+                    <div key={`npc-legendary-action-${i}`} className='action'>
+                      <h2>{action.name}</h2>
+                      <p>{action.description}</p>
+                    </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
             {isEditing && (
@@ -1121,8 +1150,8 @@ export default class CharacterSheet extends Component {
               <div className='col-2'>
                 <div className='attribute attribute-sub'>
                   <input
-                      defaultValue={character.speed_walking}
-                      name='speed_walking'
+                      defaultValue={character.speed_walk}
+                      name='speed_walk'
                       onChange={onChange}
                       className='large'
                       placeholder='0'
@@ -1133,8 +1162,8 @@ export default class CharacterSheet extends Component {
                 </div>
                 <div className='attribute attribute-sub'>
                   <input
-                      defaultValue={character.speed_climbing}
-                      name='speed_climbing'
+                      defaultValue={character.speed_climb}
+                      name='speed_climb'
                       onChange={onChange}
                       className='large'
                       placeholder='0'
@@ -1145,8 +1174,8 @@ export default class CharacterSheet extends Component {
                 </div>
                 <div className='attribute attribute-sub'>
                   <input
-                      defaultValue={character.speed_swimming}
-                      name='speed_swimming'
+                      defaultValue={character.speed_swim}
+                      name='speed_swim'
                       onChange={onChange}
                       className='large'
                       placeholder='0'
@@ -1157,8 +1186,8 @@ export default class CharacterSheet extends Component {
                 </div>
                 <div className='attribute attribute-sub'>
                   <input
-                      defaultValue={character.speed_flying}
-                      name='speed_flying'
+                      defaultValue={character.speed_fly}
+                      name='speed_fly'
                       onChange={onChange}
                       className='large'
                       placeholder='0'
@@ -1598,6 +1627,7 @@ export default class CharacterSheet extends Component {
                   <Feature
                     {...feature}
                     i={i}
+                    key={`feature-${i}`}
                     onChange={this.onChange}
                     onRemoveTool={this.onRemoveTool}
                     onToggleEditing={this.onToggleEditing}
@@ -2235,6 +2265,32 @@ export default class CharacterSheet extends Component {
 
           .currency .attribute {
             border: 0;
+          }
+
+          .action {
+            margin-top: 12px;
+            color: ${color.grey[100]};
+          }
+
+          .action:hover {
+            cursor: pointer;
+          }
+
+          .action:hover h2 {
+            color: ${color.yellow[500]};
+          }
+
+          .action p,
+          .action h2 {
+            margin: 0;
+          }
+
+          .action h2 {
+            font-size: 16px;
+            color: ${color.grey[50]};
+          }
+          .action p {
+            font-size: 13px;
           }
         `}</style>
       </div>
