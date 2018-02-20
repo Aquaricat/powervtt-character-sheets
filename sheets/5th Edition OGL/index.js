@@ -1037,7 +1037,7 @@ export default class CharacterSheet extends Component {
 
                   <h4
                     onClick={runMacro}
-                    data-macro={`!r 1d20+@me.dexterity "Initiative"`}
+                    data-macro={`!r 1d20+@me.dexterity_mod "Initiative"`}
                     data-as={character.key}
                     className='macro'
                   >
