@@ -1,14 +1,14 @@
 import attack from './attack'
 
+/**
+ * Template Components; 
+ * @type {Object}
+ */
 export default {
-  /**
-   * Template Components; 
-   * @type {Object}
-   */
-  templates: {
-    attack,
-  }
+  attack,
+}
 
+export const data = {
   /**
    * Default scope name for the templates
    * @type {String}
