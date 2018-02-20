@@ -1,12 +1,12 @@
 import Sheet from './sheet'
 
-export default {
-  /**
-   * Sheet Component
-   * @type {Component}
-   */
-  component: Sheet,
+/**
+ * Sheet Component
+ * @type {Component}
+ */
+export default Sheet
 
+export const data = {
   /**
    * Name of the sheet
    * @type {String}
