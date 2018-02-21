@@ -1,11 +1,13 @@
 import attack from './attack'
+import check from './check'
 
 /**
- * Template Components; 
+ * Template Components;
  * @type {Object}
  */
 export default {
   attack,
+  check,
 }
 
 export const data = {
