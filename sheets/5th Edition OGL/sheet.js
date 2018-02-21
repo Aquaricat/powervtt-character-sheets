@@ -1709,7 +1709,7 @@ export default class CharacterSheet extends Component {
           }
 
           .character-sheet a {
-            transtiion: all 0.15s ease-out;
+            transition: all 0.15s ease-out;
           }
 
           .character-sheet h4 {
