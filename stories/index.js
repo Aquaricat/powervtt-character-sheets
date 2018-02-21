@@ -4,3 +4,4 @@ import './styles.css'
 // Please keep in alphabetical order
 import './5e Powered-DCA'
 import './5th Edition OGL'
+import './templates'
