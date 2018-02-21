@@ -2,7 +2,29 @@ import React, { Component } from 'react'
 import { action } from '@storybook/addon-actions'
 import character from './sample'
 
-export default function withStub (Child) {
+export function withTemplateStub (Child) {
+  return class TemplateStub extends Component {
+    constructor () {
+      super(...arguments)
+
+      this.executeMacro = this.executeMacro.bind(this)
+    }
+
+    executeMacro (input, _as) {
+      action('macro')(input)
+    }
+
+    render () {
+      return (
+        <Child
+          executeMacro={this.executeMacro}
+        />
+      )
+    }
+  }
+}
+
+export function withStub (Child) {
   return class Stub extends Component {
     constructor () {
       super(...arguments)
