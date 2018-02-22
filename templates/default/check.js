@@ -46,14 +46,8 @@ export default class CheckTemplate extends Component {
         </div>
         <div className="crBody">
           <Roll
-            advantage={roll.advantage}
-            bonuses={roll.bonus}
-            crit={roll.crit}
-            die={roll.die}
-            mod={roll.mod}
+            roll={roll}
             onRollsComplete={this.onRollsCompleted}
-            prof={roll.pb}
-            range={roll.range}
           />
         </div>
         <style jsx>{`
