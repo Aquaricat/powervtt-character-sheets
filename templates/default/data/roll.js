@@ -1,7 +1,7 @@
 export const roll1 = [
   {
     advantage: false,
-    bonus: false,
+    bonuses: false,
     crit: false,
     die: '1d20',
     mod: 3,
@@ -16,7 +16,7 @@ export const roll1 = [
 export const roll2 = [
   {
     advantage: 1,
-    bonus: false,
+    bonuses: false,
     crit: {
       fail: [ 1, ],
       success: [ 20, 19, 18, ],
@@ -34,7 +34,7 @@ export const roll2 = [
 export const roll3 = [
   {
     advantage: -1,
-    bonus: [
+    bonuses: [
       { label: 'Fighting Style: Archery', bonus: 2, roll: false },
     ],
     crit: {
@@ -43,10 +43,7 @@ export const roll3 = [
     },
     die: '1d20',
     mod: -1,
-    pb: {
-      base: 2,
-      multiplier: 2,
-    },
+    pb: false,
     range: false,
   },
 ]
@@ -54,7 +51,7 @@ export const roll3 = [
 export const roll4 = [
   {
     advantage: false,
-    bonus: [
+    bonuses: [
       {label: 'Bless', bonus: 1, roll: '1d4'},
       {label: 'Bane', bonus: -1, roll: '1d4'},
     ],
@@ -75,7 +72,7 @@ export const roll4 = [
 export const roll5 = [
   {
     advantage: false,
-    bonus: false,
+    bonuses: false,
     crit: {
       fail: [ 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, ],
       success: false,
@@ -93,7 +90,7 @@ export const roll5 = [
 export const roll6 = [
   {
     advantage: false,
-    bonus: false,
+    bonuses: false,
     crit: false,
     die: '1d20',
     mod: 3,
