@@ -153,7 +153,7 @@ export default class RollTemplate extends Component {
             // Join the rerolls into a list and add to label.
             const rrList = (cleanDie.list.length > 1)
               ? `:(${cleanDie.list.join(', ')})` : ''
-            cleanDie.label = `${cleanDie.value}${rrList}`
+            cleanDie.label = `${rrList}`
 
             // Add to the collection of cleaned dice.
             cleanDice.push(cleanDie)
@@ -171,7 +171,7 @@ export default class RollTemplate extends Component {
             const cleanDie = {
               id:               d.id,
               value:            d.value,
-              label:            `${d.value}`,
+              label:            false,
               timestamp:        d.timestamp,
               is_dropped:       d.is_dropped,
               is_successful:    d.is_successful,
@@ -190,7 +190,6 @@ export default class RollTemplate extends Component {
         const xpand = []
         _forEach(orderedDice, (v) => {
           if ( range !== false ) {
-            let dRange = 0
             if ( range.max && (range.max < v.value) ) {
               xtotal += range.max
               xpand.push(`${v.value}=>${range.max}${v.label ? v.label : ''}`)
@@ -199,7 +198,7 @@ export default class RollTemplate extends Component {
               xpand.push(`${v.value}=>${range.min}${v.label ? v.label : ''}`)
             } else {
               xtotal += v.value
-              xpand(`${v.value}${v.label ? v.label : ''}`)
+              xpand.push(`${v.value}${v.label ? v.label : ''}`)
             }
           } else {
             xtotal += v.value
