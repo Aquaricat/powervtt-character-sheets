@@ -14,8 +14,8 @@ export default class AttackTemplate extends Component {
       description: props.description,
       attack: props.attack || false,
       damage: props.damage || [],
-      attackRoll: undefined,
-      damageRolls: [],
+      attackRoll: props.attack_roll || undefined,
+      damageRolls: props.damage_rolls || [],
     }
   }
 
@@ -23,16 +23,17 @@ export default class AttackTemplate extends Component {
     // If we have an attack roll, roll it immediately
     const {
       attack,
+      attackRoll,
     } = this.state
 
     try {
-      if (attack) {
+      if (!attackRoll && attack) {
         const {
           base,
           proficiency,
         } = attack
 
-        let macro = `!r ${base}`
+        let macro = `!hr ${base}`
         if (proficiency) {
           macro += '+@{me}.proficiency_bonus'
         }
@@ -41,6 +42,12 @@ export default class AttackTemplate extends Component {
         this.setState({
           attackRoll,
         })
+
+        if (this.props.id) {
+          this.props.updateTemplate(this.props.id, {
+            attack_roll: attackRoll,
+          })
+        }
       }
     } catch (e) {
       console.trace(e)
@@ -50,10 +57,11 @@ export default class AttackTemplate extends Component {
   async onRollDamage () {
     const {
       damage,
+      damageRolls,
     } = this.state
 
     try {
-      if (damage && damage.length > 0) {
+      if (damage && damageRolls.length === 0 && damage.length > 0) {
         const damageRolls = await Promise.map(damage, (dmg) => new Promise(async (resolve, reject) => {
           const {
             base,
@@ -61,7 +69,7 @@ export default class AttackTemplate extends Component {
           } = dmg
 
           try {
-            let macro = `!r ${base}`
+            let macro = `!hr ${base}`
             if (modifier.mod) {
               macro += `+${modifier.mod}`
             }
@@ -76,6 +84,12 @@ export default class AttackTemplate extends Component {
         this.setState({
           damageRolls,
         })
+
+        if (this.props.id) {
+          this.props.updateTemplate(this.props.id, {
+            damage_rolls: damageRolls,
+          })
+        }
       }
     } catch (e) {
       console.trace(e)

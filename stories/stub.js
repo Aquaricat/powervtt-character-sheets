@@ -10,6 +10,10 @@ export function withTemplateStub (Child) {
       this.executeMacro = this.executeMacro.bind(this)
     }
 
+    updateTemplate (id, attributes = {}) {
+      action('updateTemplate')(id, attributes)
+    }
+
     executeMacro (input, _as) {
       action('macro')(input)
 
@@ -30,10 +34,14 @@ export function withTemplateStub (Child) {
     }
 
     render () {
+      const attack = character.attacks[0]
+
       return (
         <Child
-          {...character.attacks[0]}
+          {...attack}
+          id='test_id'
           executeMacro={this.executeMacro}
+          updateTemplate={this.updateTemplate}
         />
       )
     }
