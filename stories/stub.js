@@ -40,6 +40,8 @@ export function withTemplateStub (Child) {
         <Child
           {...attack}
           id='test_id'
+          user='test_user_id'
+          me='test_user_id'
           executeMacro={this.executeMacro}
           updateTemplate={this.updateTemplate}
         />

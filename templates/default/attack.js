@@ -19,6 +19,20 @@ export default class AttackTemplate extends Component {
     }
   }
 
+  componentWillReceiveProps (props) {
+    if (!this.props.damage_rolls && props.damage_rolls) {
+      this.setState({
+        damageRolls: props.damage_rolls,
+      })
+    }
+
+    if (!this.props.attack_roll && props.attack_roll) {
+      this.setState({
+        attackRoll: props.attack_roll
+      })
+    }
+  }
+
   async componentDidMount () {
     // If we have an attack roll, roll it immediately
     const {
@@ -26,8 +40,13 @@ export default class AttackTemplate extends Component {
       attackRoll,
     } = this.state
 
+    const {
+      user,
+      me,
+    } = this.props
+
     try {
-      if (!attackRoll && attack) {
+      if (!attackRoll && attack && user === me) {
         const {
           base,
           proficiency,
@@ -60,8 +79,13 @@ export default class AttackTemplate extends Component {
       damageRolls,
     } = this.state
 
+    const {
+      user,
+      me,
+    } = this.props
+
     try {
-      if (damage && damageRolls.length === 0 && damage.length > 0) {
+      if (damage && damageRolls.length === 0 && damage.length > 0 && user === me) {
         const damageRolls = await Promise.map(damage, (dmg) => new Promise(async (resolve, reject) => {
           const {
             base,
@@ -106,6 +130,11 @@ export default class AttackTemplate extends Component {
       damageRolls,
     } = this.state
 
+    const {
+      user,
+      me,
+    } = this.props
+
     return (
       <div className='attack'>
         <h1>{name}</h1>
@@ -115,7 +144,7 @@ export default class AttackTemplate extends Component {
           <span className='roll'>
             <span>{attackRoll.value}</span>
 
-            {damageRolls.length === 0 && damage.length > 0 && (
+            {user === me && damageRolls.length === 0 && damage.length > 0 && (
               <a onClick={this.onRollDamage}>Roll Damage</a>
             )}
             {damageRolls.length > 0 && (
