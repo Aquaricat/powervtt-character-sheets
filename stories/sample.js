@@ -72,7 +72,7 @@ export default {
   intelligence_prof: true,
   intimidation_prof: false,
   investigation_prof: false,
-  is_npc: true,
+  is_npc: false,
   level: 4,
   medicine_prof: false,
   name: 'Gimble "Jim" Nackle-Timbers-Turen-Beren-Daergel',

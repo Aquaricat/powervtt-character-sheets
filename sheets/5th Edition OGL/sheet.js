@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import Asset from './asset'
+import Attack from './attack'
 import Attribute from './attribute'
 import Feature from './feature'
 import { color } from '../styles'
