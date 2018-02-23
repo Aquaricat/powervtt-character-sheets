@@ -12,11 +12,27 @@ export function withTemplateStub (Child) {
 
     executeMacro (input, _as) {
       action('macro')(input)
+
+      if (input === '!r 2d10+3') {
+        return Promise.resolve({
+          rolls: [{
+            value: 4,
+          }]
+        })
+      }
+      if (input === '!r 1d20') {
+        return Promise.resolve({
+          rolls: [{
+            value: 16,
+          }]
+        })
+      }
     }
 
     render () {
       return (
         <Child
+          {...character.attacks[0]}
           executeMacro={this.executeMacro}
         />
       )

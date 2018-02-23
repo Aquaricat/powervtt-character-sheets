@@ -12,7 +12,9 @@
   },
   "author": "Unicorn Heart Club LLC",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "bluebird": "^3.5.1"
+  },
   "devDependencies": {
     "@storybook/addon-actions": "^3.2.15",
     "@storybook/addon-links": "^3.2.15",
