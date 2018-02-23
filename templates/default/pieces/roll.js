@@ -105,45 +105,81 @@ export default class RollTemplate extends Component {
     // Call API, and make main rolls.
     const apiRolls = []
     for ( i = 0; i < rCount; i++ ) {
-      const apiRoll = doApiRoll(die).roll
+      const apiRoll = doApiRoll(die)
       if ( apiRoll !== false ) {
-        const apiDice = apiRoll.dice
-
-        let rData = {
-          isCF: ( crit && crit.fail && _includes(crit.fail, dice.value)),
-          isCS: ( crit && crit.success && _includes(crit.success, dice.value) ),
-          isDimmed: false,
-          isValid: ( _isString(dice.id) && _isString(dice.timestamp) ),
-          total: 0,
-          xpand: [],
-        }
-
-        // Process any rerolled dice
+        const dirtyDice = apiRoll.roll.dice
         const cleanDice = []
-        _forEach(apiDice, (d) => {
-          const cleanDie = {}
+        const cleanIds = []
 
-          if ( !d.is_rerolled ) { // Die wasn't rerolled
-            cleanDie.id = d.id
-            cleanDie.value = d.value
-            cleanDie.label = false
-            cleanDie.timestamp = d.timestamp
-            cleanDie.is_dropped = d.is_dropped
-            cleanDie.is_successful = d.is_successful
-          } else if ( d.is_rerolled ) { // Die was rerolled
-            const rrDie = {}
-            this.fetchRerolls(apiDice, d.id, rrDie)
+        // Deal with the rerolled dice first.
+        _forEach(dirtyDice, (d) => {
+          // Rerolled only, and skip ones we've already done.
 
-            cleanDie.id = rrDie.id
-            cleanDie.value = rrDie.value
-            cleanDie.timestamp = rrDie.timestamp
-            cleanDie.is_dropped = rrDie.is_dropped
-            cleanDie.is_successful = rrDie.is_successful
-            cleanDie.label = `:(${rrDie.list.join('=>')})`
+          if ( d.is_rerolled && !_includes(cleanIds, d.id) ) {
+            cleanIds.push(d.id) // Add to list of cleaned IDs
+
+            // Copy the data of the initial roll over.
+            const cleanDie = {
+              id:               d.id,
+              value:            d.value,
+              label:            false,
+              timestamp:        d.timestamp,
+              is_dropped:       d.is_dropped,
+              is_successful:    d.is_successful,
+              list:             [`${d.value}`],
+            }
+
+            // Seek through the rest of the rolls for children
+            let rrChild = d.child
+            while ( rrChild !== false ) {
+              const childDie = _find(dirtyDice, (o) => {
+                return o.id === rrChild
+              })
+
+              // Update with new data from child die.
+              cleanDie.id             = childDie.id
+              cleanDie.value          = childDie.value
+              cleanDie.timestamp      = childDie.timestamp
+              cleanDie.is_dropped     = childDie.is_dropped
+              cleanDie.is_successful  = childDie.is_successful
+              cleanDie.list.push(`${childDie.value}`)
+
+              cleanIds.push(childDie.id) // Add to list of cleaned IDs
+
+              // If we're on the winning roll, stop, else loop.
+              rrChild = childDie.child || false
+            }
+
+            // Join the rerolls into a list and add to label.
+            const rrList = (cleanDie.list.length > 1)
+              ? `:(${cleanDie.list.join(', ')})` : ''
+            cleanDie.label = `${cleanDie.value}${rrList}`
+
+            // Add to the collection of cleaned dice.
+            cleanDice.push(cleanDie)
           }
-
-          cleanDice[] = cleanDie
         })
+
+        // Remove the dice we've processed from the batch.
+        _remove(dirtyDice, (o) => {
+          return _.includes(cleanIds, o.id)
+        })
+
+        // Now process the dice that didn't need a reroll
+        if (dirtyDice.length > 0) {
+          _forEach(dirtyDice, (d) => {
+            const cleanDie = {
+              id:               d.id,
+              value:            d.value,
+              label:            `${d.value}`,
+              timestamp:        d.timestamp,
+              is_dropped:       d.is_dropped,
+              is_successful:    d.is_successful,
+            }
+
+            cleanDice.push(cleanDie)
+          })
+        }
 
         // Order the dice, by value and timestamp
         const orderedDice =
@@ -157,58 +193,27 @@ export default class RollTemplate extends Component {
             let dRange = 0
             if ( range.max && (range.max < v.value) ) {
               xtotal += range.max
-              xpand[] = `${v.value}=>${range.max}${v.label ? v.label : ''}`
+              xpand.push(`${v.value}=>${range.max}${v.label ? v.label : ''}`)
             } else if ( range.min && (range.min > v.value) ) {
               xtotal += range.min
-              xpand[] = `${v.value}=>${range.min}${v.label ? v.label : ''}`
+              xpand.push(`${v.value}=>${range.min}${v.label ? v.label : ''}`)
             } else {
               xtotal += v.value
-              xpand[] =`${v.value}${v.label ? v.label : ''}`
+              xpand(`${v.value}${v.label ? v.label : ''}`)
             }
           } else {
             xtotal += v.value
-            xpand[] = `${v.value}${v.label ? v.label : ''}`
+            xpand.push(`${v.value}${v.label ? v.label : ''}`)
           }
         })
 
         rData.total = xtotal
         rData.xpand = xpand.join(', ')
 
-        apiRolls[] = rData
+        apiRolls.push(rData)
       }
     }
 
-  }
-
-  /**
-   * Processes through the rolls looking for rerolled children
-   *
-   * @param {any} rolls Rolls from the API
-   * @param {any} id ID of child
-   * @param {any} die Temporary die to be fed back to cleaned list.
-   * @memberof RollTemplate
-   */
-  fetchRerolls(rolls, id, die) {
-    const roll = _find(rolls, (o) => {
-      o.id === id
-    })
-
-    if ( _isObject(roll) ) {
-      die.id = roll.id
-      die.timestamp = roll.timestamp
-      die.is_dropped = roll.is_dropped
-      die.is_successful = roll.is_successful
-      die.value = roll.value // Final value to add
-      die.list[] = roll.value // List to show rerolls
-
-      // Remove the processed child from the rolls to prevent dupes
-      _remove(rolls, (o) => {
-        return o.id === id
-      })
-      if ( roll.is_rerolled && _isString(roll.child) ) {
-        this.fetchRerolls(rolls, roll.child, die)
-      }
-    }
   }
 
   /**
