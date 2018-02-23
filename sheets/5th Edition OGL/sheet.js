@@ -73,11 +73,10 @@ export default class CharacterSheet extends Component {
         [
           ...this.props.character.attacks,
           {
-            attribute: 'Strength',
-            isEditing: true,
-            isProficient: false,
-            mod: 0,
             name: '',
+            description: '',
+            has_attack: true,
+            isEditing: true,
           },
         ],
       )
@@ -172,8 +171,7 @@ export default class CharacterSheet extends Component {
   onChangeAttack (index, attack) {
     if (this.props.onUpdateAttribute) {
       const attacks = this.props.character.attacks.map((a, i) => ({
-        ...a,
-        ...(i === index ? attack : {}),
+        ...(i === index ? attack : a),
       }))
       this.props.onUpdateAttribute('attacks', attacks)
     }

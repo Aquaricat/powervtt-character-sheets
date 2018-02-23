@@ -53,6 +53,7 @@ export default class Attack extends Component {
       attack: attack.attack || BASE_ATTACK,
       damage: attack.damage || [ BASE_DAMAGE ],
       isEditing: props.isEditing || false,
+      hasAttack: props.has_attack !== undefined ? props.has_attack : true,
     }
   }
 
@@ -92,10 +93,12 @@ export default class Attack extends Component {
     const { value: base } = this.refs.base
     const { value: type } = this.refs.type
     const { checked: proficient } = this.refs.proficient
+    const { checked: hasAttack } = this.refs.hasAttack
 
     this.setState({
       name,
       description,
+      hasAttack,
       attack: {
         ...this.state.attack,
         base,
@@ -129,13 +132,15 @@ export default class Attack extends Component {
       damage,
       name,
       description,
+      hasAttack,
     } = this.state
 
     this.props.onSubmit(this.props.index, {
-      attack,
+      attack: hasAttack ? attack : null,
       damage,
       name,
       description,
+      has_attack: hasAttack,
     })
 
     this.setState({
@@ -168,6 +173,7 @@ export default class Attack extends Component {
       attack,
       damage,
       name,
+      hasAttack,
       isEditing,
       description,
     } = this.state
@@ -214,7 +220,19 @@ export default class Attack extends Component {
             </label>
           </div>
 
-          <div className='input-row inline'>
+          <h2>
+            <input
+              type='checkbox'
+              ref='hasAttack'
+              onChange={this.onChange}
+              checked={hasAttack}
+              className='inline'
+            />
+
+            Attack
+          </h2>
+
+          <div className={`input-row flex ${!hasAttack && 'hidden'}`}>
             <label>
               Roll
 
@@ -243,7 +261,7 @@ export default class Attack extends Component {
               <input
                 type='checkbox'
                 ref='proficient'
-                onClick={this.onChange}
+                onChange={this.onChange}
                 checked={attack.proficient}
               />
             </label>
@@ -257,7 +275,7 @@ export default class Attack extends Component {
               <a data-index={i} onClick={this.onRemoveDamage}>x</a>
             </div>
 
-            <div className='input-row inline'>
+            <div className='input-row flex'>
               <label>
                 Roll
 
@@ -347,9 +365,13 @@ export default class Attack extends Component {
             cursor: pointer;
           }
 
-          .inline {
+          .flex {
             width: 100%;
             display: flex;
+          }
+
+          .inline {
+            display: inline-block;
           }
 
           form {
@@ -410,6 +432,10 @@ export default class Attack extends Component {
 
           .actions .delete:hover {
             color: ${color.error};
+          }
+
+          .hidden {
+            display: none;
           }
         `}</style>
       </div>
