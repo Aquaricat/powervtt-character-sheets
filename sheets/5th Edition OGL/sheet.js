@@ -20,6 +20,7 @@ export default class CharacterSheet extends Component {
     this.onAddAsset = this.onAddAsset.bind(this)
     this.onAdjustAsset = this.onAdjustAsset.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.onChangeAttack = this.onChangeAttack.bind(this)
     this.onChangeTab = this.onChangeTab.bind(this)
     this.onRemoveTool = this.onRemoveTool.bind(this)
     this.onToggleAdvantage = this.onToggleAdvantage.bind(this)
@@ -165,6 +166,16 @@ export default class CharacterSheet extends Component {
 
     if (attribute && this.props.onUpdateAttribute) {
       this.props.onUpdateAttribute(attribute, data)
+    }
+  }
+
+  onChangeAttack (index, attack) {
+    if (this.props.onUpdateAttribute) {
+      const attacks = this.props.character.attacks.map((a, i) => ({
+        ...a,
+        ...(i === index ? attack : {}),
+      }))
+      this.props.onUpdateAttribute('attacks', attacks)
     }
   }
 
@@ -1332,6 +1343,7 @@ export default class CharacterSheet extends Component {
 
                 {character.attacks.map((attack, i) => (
                   <Attack
+                    onSubmit={this.onChangeAttack}
                     attack={attack}
                     key={`attack-${i}`}
                     executeMacro={executeMacro}

@@ -124,6 +124,23 @@ export default class Attack extends Component {
     e.preventDefault()
 
     console.log(this.state)
+    const {
+      attack,
+      damage,
+      name,
+      description,
+    } = this.state
+
+    this.props.onSubmit(this.props.index, {
+      attack,
+      damage,
+      name,
+      description,
+    })
+
+    this.setState({
+      isEditing: false,
+    })
   }
 
   onToggleEditing () {
