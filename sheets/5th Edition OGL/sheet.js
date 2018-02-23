@@ -1337,8 +1337,16 @@ export default class CharacterSheet extends Component {
                     executeMacro={executeMacro}
                     character={character}
                     index={i}
+                    isEditing={attack.isEditing}
+                    onDelete={this.onRemoveTool}
                   />
                 ))}
+                
+                <div onClick={this.onAddAttack} className='add'>
+                  <a>
+                    + Add Attack
+                  </a>
+                </div>
               </div>
 
               <div className='list attacks'>

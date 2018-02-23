@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import { set } from 'lodash'
 
 import { attributes } from './data'
 import { color } from '../styles'
@@ -29,15 +30,18 @@ const BASE_DAMAGE = {
     mod: 0,
     stat: 'Dexterity',
   },
-  type: '',
+  type: 'slashing',
 }
 
 export default class Attack extends Component {
   constructor (props) {
     super(...arguments)
 
-    this.onClick = this.onClick.bind(this)
+    this.onAddDamage = this.onAddDamage.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.onChangeDamage = this.onChangeDamage.bind(this)
+    this.onClick = this.onClick.bind(this)
+    this.onRemoveDamage = this.onRemoveDamage.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.onToggleEditing = this.onToggleEditing.bind(this)
 
@@ -48,38 +52,78 @@ export default class Attack extends Component {
       description: attack.description || '',
       attack: attack.attack || BASE_ATTACK,
       damage: attack.damage || [ BASE_DAMAGE ],
-      isEditing: false,
+      isEditing: props.isEditing || false,
     }
   }
 
   onClick () {
     const {
-      character: {
-        key,
-      },
+      character,
     } = this.props
 
     const {
       attack,
       name,
       description,
-      damage,
       isEditing,
     } = this.state
 
     if (!isEditing) {
+      // Before running, make sure we lookup the right modifier
+      const damage = this.state.damage.map((dmg) => ({
+        ...dmg,
+        modifier: {
+          ...dmg.modifier,
+          mod: character[`${dmg.modifier.stat.toLowerCase()}_mod`]
+           ? character[`${dmg.modifier.stat.toLowerCase()}_mod`] || 0
+           : dmg.modifier.mod || 0,
+        }
+      }))
       this.props.executeMacro(
         `!template attack ${JSON.stringify({ name, description, attack, damage })}`,
-        key
+        character.key
       )
     }
   }
 
-  onChange (e) {
+  onChange () {
+    const { value: name } = this.refs.name
+    const { value: description } = this.refs.description
+    const { value: base } = this.refs.base
+    const { value: type } = this.refs.type
+    const { checked: proficient } = this.refs.proficient
+
+    this.setState({
+      name,
+      description,
+      attack: {
+        ...this.state.attack,
+        base,
+        type,
+        proficient,
+      },
+    })
+  }
+
+  onChangeDamage (e) {
+    const { character } = this.props
+
+    const index = ~~e.target.getAttribute('data-index')
+    const { name, value } = e.target
+
+    const path = name.replace('damage.', '')
+    const damage = this.state.damage
+    set(damage, path, value)
+
+    this.setState({
+      damage,
+    })
   }
 
   onSubmit (e) {
     e.preventDefault()
+
+    console.log(this.state)
   }
 
   onToggleEditing () {
@@ -88,9 +132,24 @@ export default class Attack extends Component {
     })
   }
 
+  onAddDamage () {
+    this.setState({
+      damage: [ ...this.state.damage, BASE_DAMAGE ],
+    })
+  }
+
+  onRemoveDamage (e) {
+    const index = ~~e.target.getAttribute('data-index')
+
+    this.setState({
+      damage: this.state.damage.filter((_, i) => (i !== index)),
+    })
+  }
+
   render () {
     const {
       attack,
+      damage,
       name,
       isEditing,
       description,
@@ -98,6 +157,7 @@ export default class Attack extends Component {
 
     const {
       index,
+      onDelete,
     } = this.props
 
     return (
@@ -166,20 +226,77 @@ export default class Attack extends Component {
               <input
                 type='checkbox'
                 ref='proficient'
-                onChange={this.onChange}
+                onClick={this.onChange}
                 checked={attack.proficient}
               />
             </label>
           </div>
 
+          {damage.map((dmg, i) => (
+          <div className='damage' key={`damage-${i}`}>
+            <div className='header'>
+              <h2>Damage {i + 1}</h2>
+
+              <a data-index={i} onClick={this.onRemoveDamage}>x</a>
+            </div>
+
+            <div className='input-row inline'>
+              <label>
+                Roll
+
+                <input
+                  type='text'
+                  name={`damage.${i}.base`}
+                  value={dmg.base}
+                  onChange={this.onChangeDamage}
+                  placeholder='1d8'
+                />
+              </label>
+              <label>
+                Modifier
+
+                <select
+                  type='text'
+                  name={`damage.${i}.modifier.stat`}
+                  value={dmg.modifier.stat}
+                  onChange={this.onChangeDamage}
+                >
+                  {attributes.map((attr) => (
+                    <option key={`attack-${index}-${attr}`} value={attr}>{attr}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Type
+
+                <input
+                  type='text'
+                  name={`damage.${i}.type`}
+                  value={dmg.type}
+                  onChange={this.onChangeDamage}
+                  placeholder='piercing'
+                />
+              </label>
+            </div>
+          </div>
+          ))}
+
+          <a className='add' onClick={this.onAddDamage}>+ Add Damage</a>
+
           <div className='actions'>
-            <a onClick={this.onSave}>Save</a>
-            <a className='delete' onClick={this.onDelete}>Delete</a>
+            <a onClick={this.onSubmit}>Save</a>
+            <a className='delete' data-attack-id={index} onClick={onDelete}>Delete</a>
           </div>
         </form>
         )}
 
         <style jsx>{`
+          .add {
+            margin: 6px 0;
+            text-align: center;
+            display: inline-block;
+          }
+
           .attack {
             transition: background 0.15s ease-out;
             display: flex;
@@ -188,14 +305,20 @@ export default class Attack extends Component {
             font-size: 13px;
           }
 
+          .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+          }
+
           .name {
             flex: 1;
+            cursor: pointer;
           }
 
           .attack:hover {
             background-color: ${color.grey[700]};
             color: ${color.yellow[500]};
-            cursor: pointer;
           }
 
           a {
@@ -217,9 +340,16 @@ export default class Attack extends Component {
             width: 100%;
           }
 
+          h2 {
+            color: ${color.grey[400]};
+            font-size: 13px;
+            margin: 12px 0 0 0;
+            font-weight: 700;
+          }
+
           label {
             color: ${color.grey[400]};
-            font-size: 14px;
+            font-size: 13px;
             flex: 1;
             padding: 3px;
             flex-direction: column;
@@ -236,13 +366,18 @@ export default class Attack extends Component {
             margin-top: 3px;
           }
 
+          select option {
+            padding: 6px;
+          }
+
           .actions {
             margin-top: 3px;
           }
+
           .actions a {
             color: ${color.yellow[500]};
             transition: opacity 0.15s ease-out;
-            font-size: 14px;
+            font-size: 13px;
             padding: 6px;
           }
 
