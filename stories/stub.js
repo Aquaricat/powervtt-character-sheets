@@ -32,10 +32,15 @@ export function withStub (Child) {
       this.onChange = this.onChange.bind(this)
       this.onUpdateAttribute = this.onUpdateAttribute.bind(this)
       this.runMacro = this.runMacro.bind(this)
+      this.executeMacro = this.executeMacro.bind(this)
 
       this.state = {
         ...character,
       }
+    }
+
+    executeMacro (input, _as) {
+      action('macro')(input)
     }
 
     onChange (e) {
@@ -106,6 +111,7 @@ export function withStub (Child) {
         <Child
           character={this.state}
           runMacro={this.runMacro}
+          executeMacro={this.executeMacro}
           onUpdateAttribute={this.onUpdateAttribute}
           onChange={this.onChange}
         />

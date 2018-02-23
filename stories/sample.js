@@ -3,7 +3,7 @@ export default {
   advantage: true,
   acrobatics: 10,
   acrobatics_prof: false,
-  actions: [
+  attacks: [
     {
       name: 'Bite',
       description: 'Melee Weapon Attack: +13 to hit, reach 10 ft., one target. Hit: 19 (2d10 + 8) piercing damage.',
@@ -31,7 +31,6 @@ export default {
   arcana_prof: false,
   area: 0,
   athletics_prof: false,
-  attacks: [],
   background: 'Criminal',
   backstory: 'I was born here ...',
   bonds: 'bonds',
