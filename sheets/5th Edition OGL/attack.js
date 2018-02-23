@@ -50,10 +50,10 @@ export default class Attack extends Component {
     this.state = {
       name: attack.name || '',
       description: attack.description || '',
-      attack: attack.attack || BASE_ATTACK,
-      damage: attack.damage || [ BASE_DAMAGE ],
+      attack: attack.attack !== undefined ? attack.attack : BASE_ATTACK,
+      damage: attack.damage !== undefined ? attack.damage : [],
       isEditing: props.isEditing || false,
-      hasAttack: props.has_attack !== undefined ? props.has_attack : true,
+      hasAttack: attack.has_attack !== undefined ? attack.has_attack : true,
     }
   }
 
@@ -66,6 +66,7 @@ export default class Attack extends Component {
       attack,
       name,
       description,
+      hasAttack,
       isEditing,
     } = this.state
 
@@ -80,8 +81,15 @@ export default class Attack extends Component {
            : dmg.modifier.mod || 0,
         }
       }))
+
+      const output = {
+        name,
+        description,
+        attack: hasAttack ? attack : false,
+        damage,
+      }
       this.props.executeMacro(
-        `!template attack ${JSON.stringify({ name, description, attack, damage })}`,
+        `!template attack ${JSON.stringify(output)}`,
         character.key
       )
     }
@@ -126,7 +134,6 @@ export default class Attack extends Component {
   onSubmit (e) {
     e.preventDefault()
 
-    console.log(this.state)
     const {
       attack,
       damage,
