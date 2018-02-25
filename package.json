@@ -1,6 +1,6 @@
 {
   "name": "powervtt-character-sheets",
-  "version": "0.1.2",
+  "version": "0.3.1",
   "description": "Character sheets for use in Power Virtual TableTop",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,9 @@
   },
   "author": "Unicorn Heart Club LLC",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "bluebird": "^3.5.1"
+  },
   "devDependencies": {
     "@storybook/addon-actions": "^3.2.15",
     "@storybook/addon-links": "^3.2.15",
