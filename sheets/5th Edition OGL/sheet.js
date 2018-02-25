@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import Asset from './asset'
+import Attack from './attack'
 import Attribute from './attribute'
 import Feature from './feature'
 import { color } from '../styles'
@@ -19,6 +20,7 @@ export default class CharacterSheet extends Component {
     this.onAddAsset = this.onAddAsset.bind(this)
     this.onAdjustAsset = this.onAdjustAsset.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.onChangeAttack = this.onChangeAttack.bind(this)
     this.onChangeTab = this.onChangeTab.bind(this)
     this.onRemoveTool = this.onRemoveTool.bind(this)
     this.onToggleAdvantage = this.onToggleAdvantage.bind(this)
@@ -71,11 +73,10 @@ export default class CharacterSheet extends Component {
         [
           ...this.props.character.attacks,
           {
-            attribute: 'Strength',
-            isEditing: true,
-            isProficient: false,
-            mod: 0,
             name: '',
+            description: '',
+            has_attack: true,
+            isEditing: true,
           },
         ],
       )
@@ -164,6 +165,15 @@ export default class CharacterSheet extends Component {
 
     if (attribute && this.props.onUpdateAttribute) {
       this.props.onUpdateAttribute(attribute, data)
+    }
+  }
+
+  onChangeAttack (index, attack) {
+    if (this.props.onUpdateAttribute) {
+      const attacks = this.props.character.attacks.map((a, i) => ({
+        ...(i === index ? attack : a),
+      }))
+      this.props.onUpdateAttribute('attacks', attacks)
     }
   }
 
@@ -400,6 +410,7 @@ export default class CharacterSheet extends Component {
       character,
       onChange,
       runMacro,
+      executeMacro,
     } = this.props
 
     const {
@@ -697,10 +708,10 @@ export default class CharacterSheet extends Component {
                     <li><strong>Challenge</strong> {character.challenge} ({character.xp})</li>
                   </ul>
                 </div>
-                {character.actions && character.actions.length > 0 && (
+                {character.attacks && character.attacks.length > 0 && (
                   <div className='npc-section'>
                     <h1 className='npcName'>Actions</h1>
-                    {character.actions.map((action, i) => (
+                    {character.attacks.map((action, i) => (
                     <div
                       onClick={runMacro}
                       data-macro={`!template attack ${JSON.stringify(action)}`}
@@ -1326,95 +1337,26 @@ export default class CharacterSheet extends Component {
               </div>
 
               <div className='list attacks'>
-                <div className='tables flex'>
-                  <table cellPadding={0} cellSpacing={0}>
-                    <thead>
-                      <tr>
-                        <td>Name</td>
-                        <td>Attack</td>
-                        <td></td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {character.attacks.map((attack, i) => (
-                        <tr
-                          className={attack.isEditing && 'editable'}
-                          key={`attack-${i}`}
-                        >
-                          <td
-                            onClick={!attack.isEditing ? runMacro : undefined}
-                            data-macro={`!r 1d6+@me.${attack.attribute}+${attack.mod || 0} "${attack.name}"`}
-                            data-as={character.key}
-                          >
-                            {attack.isEditing ? (
-                              <input
-                                data-attack-id={i}
-                                type='text'
-                                placeholder='Name'
-                                name='name'
-                                onChange={this.onChange}
-                                defaultValue={attack.name}
-                                style={{ minWidth: 198 }}
-                              />
-                            ) : attack.name}
-                          </td>
-                          {attack.isEditing ? (
-                            <td style={{ width: '196px' }} className='flex'>
-                              <select
-                                data-attack-id={i}
-                                type='text'
-                                placeholder=''
-                                name='attribute'
-                                onChange={this.onChange}
-                                defaultValue={attack.attribute}
-                              >
-                                {attributes.map((attr) => (
-                                  <option key={`attack-attr-${attr}`} value={attr}>{attr}</option>
-                                ))}
-                              </select>
-
-                              +&nbsp;
-
-                              <input
-                                data-attack-id={i}
-                                type='number'
-                                placeholder='Mod'
-                                name='mod'
-                                defaultValue={attack.mod}
-                                onChange={this.onChange}
-                              />
-                            </td>
-                          ) : (
-                          <td
-                            onClick={runMacro}
-                            data-macro={`!r 1d6+@me.${attack.attribute}+${attack.mod || 0} "${attack.name}"`}
-                            data-as={character.key}
-                          >{attack.attribute} + {attack.mod}</td>
-                          )}
-                          <td>
-                            <a data-attack-id={i} onClick={this.onToggleEditing}>
-                              {attack.isEditing ? 'Save' : 'Edit'}
-                            </a>
-                            {attack.isEditing && (
-                              <a data-attack-id={i} onClick={this.onRemoveTool} className='warning'>
-                               Delete
-                              </a>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                      <tr>
-                        <td onClick={this.onAddAttack} colSpan={3} className='add'>
-                          <a>
-                            + Add Item
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
                 <h4>Attacks &amp; Spellcasting</h4>
+
+                {character.attacks.map((attack, i) => (
+                  <Attack
+                    onSubmit={this.onChangeAttack}
+                    attack={attack}
+                    key={`attack-${i}`}
+                    executeMacro={executeMacro}
+                    character={character}
+                    index={i}
+                    isEditing={attack.isEditing}
+                    onDelete={this.onRemoveTool}
+                  />
+                ))}
+                
+                <div onClick={this.onAddAttack} className='add'>
+                  <a>
+                    + Add Attack
+                  </a>
+                </div>
               </div>
 
               <div className='list attacks'>

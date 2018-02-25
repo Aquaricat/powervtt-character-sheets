@@ -151,7 +151,6 @@ export default class Feature extends Component {
           }
 
           label {
-            display: block;
             color: ${color.grey[400]};
             font-size: 14px;
             flex: 1;
