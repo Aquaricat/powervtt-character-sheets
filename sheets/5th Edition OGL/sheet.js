@@ -730,13 +730,13 @@ export default class CharacterSheet extends Component {
                       </a>
                       )
                     </li>
-                    {character.speed_walk && (
+                    {(character.speed_walk || character.speed) && (
                       <li>
                         <strong>Speed</strong>
-                        {` ${character.speed_walk} ft`}
-                        {character.speed_swim && `, Swim ${character.speed_swim} ft`}
-                        {character.speed_climb && `, Swim ${character.speed_climb} ft`}
-                        {character.speed_fly && `, Fly ${character.speed_walk} ft`}
+                        {` ${character.speed_walk || character.speed} ft`}
+                        {character.speed_swim !== undefined && character.speed_swim > 0 && `, Swim ${character.speed_swim} ft`}
+                        {character.speed_climb !== undefined && character.speed_climb > 0 && `, Swim ${character.speed_climb} ft`}
+                        {character.speed_fly !== undefined && character.speed_fly > 0 && `, Fly ${character.speed_walk} ft`}
                       </li>
                     )}
                   </ul>
