@@ -6,24 +6,27 @@ import Attribute from './attribute'
 import Feature from './feature'
 import { color } from '../styles'
 
-import { attributes, skills } from './data'
+import { attributes, languages, skills } from './data'
 
 export default class CharacterSheet extends Component {
   constructor (props) {
     super(...arguments)
 
+    this.onAddAsset = this.onAddAsset.bind(this)
     this.onAddAttack = this.onAddAttack.bind(this)
+    this.onAddLegendaryAction = this.onAddLegendaryAction.bind(this)
     this.onAddEquipment = this.onAddEquipment.bind(this)
     this.onAddFeature = this.onAddFeature.bind(this)
     this.onAddProficiency = this.onAddProficiency.bind(this)
     this.onAddTool = this.onAddTool.bind(this)
-    this.onAddAsset = this.onAddAsset.bind(this)
     this.onAdjustAsset = this.onAdjustAsset.bind(this)
     this.onChange = this.onChange.bind(this)
     this.onChangeAttack = this.onChangeAttack.bind(this)
+    this.onChangeLegendaryAction = this.onChangeLegendaryAction.bind(this)
     this.onChangeTab = this.onChangeTab.bind(this)
     this.onRemoveTool = this.onRemoveTool.bind(this)
     this.onToggleAdvantage = this.onToggleAdvantage.bind(this)
+    this.onToggleCheckbox = this.onToggleCheckbox.bind(this)
     this.onToggleEditNPC = this.onToggleEditNPC.bind(this)
     this.onToggleEditing = this.onToggleEditing.bind(this)
     this.onToggleNPC = this.onToggleNPC.bind(this)
@@ -72,6 +75,23 @@ export default class CharacterSheet extends Component {
         'attacks',
         [
           ...this.props.character.attacks,
+          {
+            name: '',
+            description: '',
+            has_attack: true,
+            isEditing: true,
+          },
+        ],
+      )
+    }
+  }
+
+  onAddLegendaryAction () {
+    if (this.props.onUpdateAttribute) {
+      this.props.onUpdateAttribute(
+        'legendary_actions',
+        [
+          ...this.props.character.legendary_actions,
           {
             name: '',
             description: '',
@@ -177,6 +197,15 @@ export default class CharacterSheet extends Component {
     }
   }
 
+  onChangeLegendaryAction (index, attack) {
+    if (this.props.onUpdateAttribute) {
+      const attacks = this.props.character.legendary_actions.map((a, i) => ({
+        ...(i === index ? attack : a),
+      }))
+      this.props.onUpdateAttribute('legendary_actions', attacks)
+    }
+  }
+
   onChange (e) {
     const attr = e.target.name
     const value = e.target.value
@@ -260,6 +289,7 @@ export default class CharacterSheet extends Component {
   onRemoveTool (e) {
     const assetId = e.target.getAttribute('data-asset-id')
     const attackId = e.target.getAttribute('data-attack-id')
+    const legendaryActionId = e.target.getAttribute('data-legendary-action-id')
     const equipmentId = e.target.getAttribute('data-equipment-id')
     const toolId = e.target.getAttribute('data-tool-id')
     const otherId = e.target.getAttribute('data-other-id')
@@ -271,6 +301,10 @@ export default class CharacterSheet extends Component {
       const id = ~~attackId
       attribute = 'attacks'
       data = this.props.character.attacks.filter((_, i) => (id !== i))
+    } else if (legendaryActionId !== null) {
+      const id = ~~legendaryActionId
+      attribute = 'legendary_actions'
+      data = this.props.character.legendary_actions.filter((_, i) => (id !== i))
     } else if (equipmentId !== null) {
       const id = ~~equipmentId
       attribute = 'equipment'
@@ -308,6 +342,31 @@ export default class CharacterSheet extends Component {
     }
   }
 
+  onToggleCheckbox (e) {
+    const name = e.target.name
+    const checked = e.target.checked
+    const value = e.target.value
+
+    let data = this.props.character[name]
+    if (name === 'languages') {
+      if (!data) {
+        data = []
+      }
+
+      if (checked) {
+        data.push(value)
+      } else {
+        data = data.filter(l => l !== value)
+      }
+    } else {
+      data = value
+    }
+
+    if (this.props.onUpdateAttribute) {
+      this.props.onUpdateAttribute(name, data) 
+    }
+  }
+
   onToggleEditNPC () {
     this.setState({
       isEditing: !this.state.isEditing,
@@ -317,6 +376,7 @@ export default class CharacterSheet extends Component {
   onToggleEditing (e) {
     const assetId = e.target.getAttribute('data-asset-id')
     const attackId = e.target.getAttribute('data-attack-id')
+    const legendaryActionId = e.target.getAttribute('data-legendary-action-id')
     const equipmentId = e.target.getAttribute('data-equipment-id')
     const toolId = e.target.getAttribute('data-tool-id')
     const otherId = e.target.getAttribute('data-other-id')
@@ -328,6 +388,13 @@ export default class CharacterSheet extends Component {
       const id = ~~attackId
       attribute = 'attacks'
       data = this.props.character.attacks.map((attack, i) => ({
+        ...attack,
+        isEditing: i === id ? !attack.isEditing : attack.isEditing,
+      }))
+    } else if (legendaryActionId !== null) {
+      const id = ~~legendaryActionId
+      attribute = 'legendary_actions'
+      data = this.props.character.legendary_actions.map((attack, i) => ({
         ...attack,
         isEditing: i === id ? !attack.isEditing : attack.isEditing,
       }))
@@ -663,7 +730,15 @@ export default class CharacterSheet extends Component {
                       </a>
                       )
                     </li>
-                    <li><strong>Speed</strong> {character.speed}</li>
+                    {character.speed_walk && (
+                      <li>
+                        <strong>Speed</strong>
+                        {` ${character.speed_walk} ft`}
+                        {character.speed_swim && `, Swim ${character.speed_swim} ft`}
+                        {character.speed_climb && `, Swim ${character.speed_climb} ft`}
+                        {character.speed_fly && `, Fly ${character.speed_walk} ft`}
+                      </li>
+                    )}
                   </ul>
                 </div>
                 <div className='npc-section npc-stats'>
@@ -702,10 +777,11 @@ export default class CharacterSheet extends Component {
                         </span>
                       ))}
                     </li>
-                    <li><strong>Damage Immunities</strong> {character.damage_immunities}</li>
-                    <li><strong>Senses</strong> {character.senses}</li>
-                    <li><strong>Languages</strong> {character.other_profs_and_langs.map(lang => lang.proficiency).join(', ')}</li>
-                    <li><strong>Challenge</strong> {character.challenge} ({character.xp})</li>
+                    {false && (<li><strong>Damage Immunities</strong> {character.damage_immunities}</li>)}
+                    {character.languages && character.languages.length > 0 && (
+                      <li><strong>Languages</strong> {character.languages.join(', ')}</li>
+                    )}
+                    <li><strong>Challenge</strong> {character.cr} ({character.xp})</li>
                   </ul>
                 </div>
                 {character.attacks && character.attacks.length > 0 && (
@@ -837,8 +913,8 @@ export default class CharacterSheet extends Component {
                   <div className='flex'>
                     <label>
                       <input
-                        defaultValue={character.speed}
-                        name='speed'
+                        defaultValue={character.speed_walk}
+                        name='speed_walk'
                         placeholder='0'
                         onChange={onChange}
                         type='text'
@@ -883,41 +959,209 @@ export default class CharacterSheet extends Component {
                       Fly
                     </label>
                   </div>
-                </div>
 
-                <div className='npc-edit-section'>
-                  <h2>Hit Points</h2>
+                  <div className='flex'>
+                    <label>
+                      <input
+                        defaultValue={character.hp}
+                        name='hp'
+                        onChange={onChange}
+                        type='number'
+                      />
+
+                      HP
+                    </label>
+
+                    <label>
+                      <input
+                        defaultValue={character.hp_formula}
+                        name='hp_formula'
+                        onChange={onChange}
+                        placeholder='e.g. 10d12'
+                        type='text'
+                      />
+
+                      HP Formula
+                    </label>
+                  </div>
                 </div>
 
                 <div className='npc-edit-section'>
                   <h2>Abilities</h2>
+
+                  <div className='flex'>
+                    {attributes.map((attr, i) => (
+                      <label key={`npc-attribute-${i}`}>
+                        <input
+                          defaultValue={character[attr.toLowerCase()]}
+                          name={attr.toLowerCase()}
+                          onChange={onChange}
+                          placeholder='0'
+                          type='number'
+                        />
+
+                        {attr}
+                      </label>
+                    ))}
+                  </div>
                 </div>
 
                 <div className='npc-edit-section'>
                   <h2>Saving Throws</h2>
+
+                  <div className='flex'>
+                    {attributes.map((attr, i) => (
+                      <label key={`npc-saving-attribute-${i}`}>
+                        <input
+                          defaultValue={character[`${attr.toLowerCase()}_save`]}
+                          name={`${attr.toLowerCase()}_save`}
+                          onChange={onChange}
+                          placeholder='0'
+                          type='number'
+                        />
+
+                        {attr}
+                      </label>
+                    ))}
+                  </div>
                 </div>
 
                 <div className='npc-edit-section'>
                   <h2>Skills</h2>
 
+                  <div className='flex'>
+                    {skills.slice(0, 9).map((skill, i) => (
+                      <label key={`npc-skill-${skill.code}`}>
+                        <input
+                          defaultValue={character[skill.code]}
+                          name={skill.code}
+                          onChange={onChange}
+                          placeholder='0'
+                          type='number'
+                        />
+
+                        {skill.name}
+                      </label>
+                    ))}
+                  </div>
+
+                  <div className='flex'>
+                    {skills.slice(9, skills.length).map((skill, i) => (
+                      <label key={`npc-skill-${skill.code}`}>
+                        <input
+                          defaultValue={character[skill.code]}
+                          name={skill.code}
+                          onChange={onChange}
+                          placeholder='0'
+                          type='number'
+                        />
+
+                        {skill.name}
+                      </label>
+                    ))}
+                  </div>
+
                   <div className='section'>
                     <h3>Languages</h3>
+
+                    {languages.map((lang, i) => (
+                      <label key={`npc-language-${i}`}>
+                        <input
+                          name='languages'
+                          onChange={this.onToggleCheckbox}
+                          type='checkbox'
+                          value={lang}
+                          defaultChecked={character.languages && character.languages.indexOf(lang) >= 0}
+                        />
+
+                        {lang}
+                      </label>
+                    ))}
                   </div>
 
-                  <div className='section'>
-                    <h3>Damage Resistance</h3>
-                  </div>
+                  {/** Todo **/}
+                  {false && (
+                  <Fragment>
+                    <div className='section'>
+                      <h3>Damage Resistance</h3>
+                    </div>
 
-                  <div className='section'>
-                    <h3>Damage Immunity</h3>
-                  </div>
+                    <div className='section'>
+                      <h3>Damage Immunity</h3>
+                    </div>
 
-                  <div className='section'>
-                    <h3>Damage Vulnerability</h3>
-                  </div>
+                    <div className='section'>
+                      <h3>Damage Vulnerability</h3>
+                    </div>
 
-                  <div className='section'>
-                    <h3>Condition Immunity</h3>
+                    <div className='section'>
+                      <h3>Condition Immunity</h3>
+                    </div>
+                  </Fragment>
+                  )}
+                </div>
+
+                <div className='npc-edit-section'>
+                  <div className='flex'>
+                    <label>
+                      Character Description
+
+                      <textarea
+                        defaultValue={character.description}
+                        name='description'
+                        onChange={onChange}
+                        type='text'
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div className='npc-edit-section'>
+                  <h2>Actions</h2>
+
+                  {character.attacks.map((attack, i) => (
+                    <Attack
+                      onSubmit={this.onChangeAttack}
+                      attack={attack}
+                      key={`attack-${i}`}
+                      executeMacro={executeMacro}
+                      character={character}
+                      index={i}
+                      isNPC={true}
+                      isEditing={attack.isEditing}
+                      onDelete={this.onRemoveTool}
+                    />
+                  ))}
+                  
+                  <div onClick={this.onAddAttack} className='add'>
+                    <a>
+                      + Add Attack
+                    </a>
+                  </div>
+                </div>
+
+                <div className='npc-edit-section'>
+                  <h2>Legendary Actions</h2>
+
+                  {character.legendary_actions.map((attack, i) => (
+                    <Attack
+                      onSubmit={this.onChangeLegendaryAction}
+                      attack={attack}
+                      key={`legendary-action-${i}`}
+                      executeMacro={executeMacro}
+                      character={character}
+                      index={i}
+                      isNPC={true}
+                      isLegendaryAction={true}
+                      isEditing={attack.isEditing}
+                      onDelete={this.onRemoveTool}
+                    />
+                  ))}
+                  
+                  <div onClick={this.onAddLegendaryAction} className='add'>
+                    <a>
+                      + Add Attack
+                    </a>
                   </div>
                 </div>
               </div>
@@ -1808,7 +2052,15 @@ export default class CharacterSheet extends Component {
           .npc-edit-section h3 {
             color: ${color.grey[50]};
             font-size: 16px;
-            margin: 0 0 12px 0;
+            margin: 12px 0;
+          }
+
+          .npc-edit-section .flex {
+            flex-wrap: wrap;
+          }
+
+          .npc-edit-section label {
+            margin: 0 3px;
           }
 
           .character-sheet a {

@@ -7,6 +7,39 @@ export const attributes = [
   'Charisma'
 ]
 
+export const languages = [
+  'Abyssal',
+  'Aquan',
+  'Common',
+  'Celestial',
+  'Draconic',
+  'Sahuagin',
+  'Otyugh',
+  'Orc',
+  'Primordial',
+  'Terran',
+  'Auran',
+  'Sphinx',
+  'Undercommon',
+  'Gnomish',
+  'Gnoll',
+  'Giant Owl',
+  'Giant Elk',
+  'Giant Eagle',
+  'Ignan',
+  'Druidic',
+  'Dwarvish',
+  'Deep Speech',
+  'Blink Dog',
+  'Elvish',
+  'Giant',
+  'Goblin',
+  'Infernal',
+  'Sylvan',
+  'Winter Wolf',
+  'Worg',
+]
+
 export const skills = [
   {
     "code": "acrobatics",
