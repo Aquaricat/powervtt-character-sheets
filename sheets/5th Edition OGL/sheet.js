@@ -741,41 +741,183 @@ export default class CharacterSheet extends Component {
             )}
             {isEditing && (
               <div className='col-1'>
-                <label className='flex'>
-                  <input
-                    defaultValue={character.name}
-                    name='name'
-                    onChange={onChange}
-                    type='text'
-                  />
+                <div className='npc-edit-section'>
+                  <div className='flex'>
+                    <label>
+                      <input
+                        defaultValue={character.name}
+                        name='name'
+                        onChange={onChange}
+                        type='text'
+                      />
 
-                  Character Name
-                </label>
+                      Character Name
+                    </label>
+                  </div>
 
-                <label className='flex'>
-                  <input
-                    defaultValue={character.npc_type}
-                    name='npc_type'
-                    onChange={onChange}
-                    placeholder='Dragon, Chaotic Evil'
-                    type='text'
-                  />
+                  <div className='flex'>
+                    <label>
+                      <input
+                        defaultValue={character.cr}
+                        name='cr'
+                        onChange={onChange}
+                        placeholder=''
+                        type='number'
+                      />
 
-                  NPC Type
-                </label>
+                      Challenge
+                    </label>
 
-                <div className='stats flex'>
-                  <div className='attribute'>
-                    <input
-                      defaultValue={character.ac}
-                      name='ac'
-                      onChange={onChange}
-                      className='large'
-                      placeholder='0'
-                      type='number'
-                    />
+                    <label>
+                      <select
+                        defaultValue={character.tile_size || '1'}
+                        name='tile_size'
+                        onChange={onChange}
+                      >
+                        <option value='0'>Tiny</option>
+                        <option value='1'>Small</option>
+                        <option value='2'>Medium</option>
+                        <option value='4'>Large</option>
+                        <option value='5'>Huge</option>
+                        <option value='6'>Gargantuan</option>
+                      </select>
 
-                    <h4>Armor Class</h4>
+                      Size
+                    </label>
+
+                    <label>
+                      <select
+                        defaultValue={character.type}
+                        name='type'
+                        onChange={onChange}
+                      >
+                        <option value="aberration">aberration</option>
+                        <option value="beast">beast</option>
+                        <option value="celestial">celestial</option>
+                        <option value="construct">construct</option>
+                        <option value="dragon">dragon</option>
+                        <option value="elemental">elemental</option>
+                        <option value="fey">fey</option>
+                        <option value="fiend">fiend</option>
+                        <option value="giant">giant</option>
+                        <option value="humanoid">humanoid</option>
+                        <option value="monstrosity">monstrosity</option>
+                        <option value="ooze">ooze</option>
+                        <option value="plant">plant</option>
+                        <option value="swarm-of-tiny-beasts">swarm of tiny beasts</option>
+                        <option value="undead">undead</option>
+                      </select>
+
+                      Type
+                    </label>
+
+                    <label>
+                      <input
+                        defaultValue={character.alignment}
+                        name='alignment'
+                        onChange={onChange}
+                        type='text'
+                      />
+
+                      Alignment
+                    </label>
+
+                    <label>
+                      <input
+                        defaultValue={character.ac}
+                        name='ac'
+                        onChange={onChange}
+                        type='text'
+                      />
+
+                      Armor Class
+                    </label>
+                  </div>
+
+                  <div className='flex'>
+                    <label>
+                      <input
+                        defaultValue={character.speed}
+                        name='speed'
+                        placeholder='0'
+                        onChange={onChange}
+                        type='text'
+                      />
+
+                      Speed
+                    </label>
+
+                    <label>
+                      <input
+                        defaultValue={character.speed_climb}
+                        name='speed_climb'
+                        placeholder='0'
+                        onChange={onChange}
+                        type='text'
+                      />
+
+                      Climb
+                    </label>
+
+                    <label>
+                      <input
+                        defaultValue={character.speed_swim}
+                        name='speed_swim'
+                        placeholder='0'
+                        onChange={onChange}
+                        type='text'
+                      />
+
+                      Swim
+                    </label>
+
+                    <label>
+                      <input
+                        defaultValue={character.speed_fly}
+                        name='speed_fly'
+                        onChange={onChange}
+                        placeholder='0'
+                        type='text'
+                      />
+
+                      Fly
+                    </label>
+                  </div>
+                </div>
+
+                <div className='npc-edit-section'>
+                  <h2>Hit Points</h2>
+                </div>
+
+                <div className='npc-edit-section'>
+                  <h2>Abilities</h2>
+                </div>
+
+                <div className='npc-edit-section'>
+                  <h2>Saving Throws</h2>
+                </div>
+
+                <div className='npc-edit-section'>
+                  <h2>Skills</h2>
+
+                  <div className='section'>
+                    <h3>Languages</h3>
+                  </div>
+
+                  <div className='section'>
+                    <h3>Damage Resistance</h3>
+                  </div>
+
+                  <div className='section'>
+                    <h3>Damage Immunity</h3>
+                  </div>
+
+                  <div className='section'>
+                    <h3>Damage Vulnerability</h3>
+                  </div>
+
+                  <div className='section'>
+                    <h3>Condition Immunity</h3>
                   </div>
                 </div>
               </div>
@@ -1650,6 +1792,25 @@ export default class CharacterSheet extends Component {
             padding: 12px;
           }
 
+          .npc-edit-section {
+            border-radius: 3px;
+            margin: 6px 0;
+            padding: 12px;
+            border: 1px solid ${color.grey[700]};
+          }
+
+          .npc-edit-section h2 {
+            color: ${color.grey[50]};
+            font-size: 18px;
+            margin: 0 0 12px 0;
+          }
+
+          .npc-edit-section h3 {
+            color: ${color.grey[50]};
+            font-size: 16px;
+            margin: 0 0 12px 0;
+          }
+
           .character-sheet a {
             transtiion: all 0.15s ease-out;
           }
@@ -1662,6 +1823,7 @@ export default class CharacterSheet extends Component {
             text-align: center;
           }
 
+          .character-sheet select,
           .character-sheet input[type='text'],
           .character-sheet input[type='number'] {
             background-color: transparent;
@@ -1676,6 +1838,13 @@ export default class CharacterSheet extends Component {
             padding: 6px 0;
             transition: border 0.15s ease-out;
             width: 100%;
+          }
+
+          .character-sheet select {
+          }
+
+          .character-sheet select option {
+            color: ${color.grey[950]};
           }
 
           .character-sheet textarea {
