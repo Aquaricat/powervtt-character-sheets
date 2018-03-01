@@ -155,7 +155,10 @@ export default class Attack extends Component {
     })
   }
 
-  onToggleEditing () {
+  onToggleEditing (e) {
+    e.preventDefault()
+    e.stopPropagation()
+
     this.setState({
       isEditing: !this.state.isEditing,
     })
@@ -188,15 +191,25 @@ export default class Attack extends Component {
     const {
       index,
       onDelete,
+      isLegendaryAction,
+      isNPC,
     } = this.props
 
     return (
       <div className='attack'>
-        {!isEditing && (
+        {!isEditing && !isNPC && (
           <Fragment>
-            <span className='name' onClick={this.onClick}>{name}</span>
+            <span onClick={this.onClick} className='name'>{name}</span>
             <a onClick={this.onToggleEditing} className='edit'>Edit</a>
           </Fragment>
+        )}
+
+        {!isEditing && isNPC && (
+          <div>
+            <span className='name npc'>{name}</span>
+            <span className='description'>{description}</span>
+            <a onClick={this.onToggleEditing} className='edit'>Edit</a>
+          </div>
         )}
 
         {isEditing && (
@@ -327,7 +340,14 @@ export default class Attack extends Component {
 
           <div className='actions'>
             <a onClick={this.onSubmit}>Save</a>
-            <a className='delete' data-attack-id={index} onClick={onDelete}>Delete</a>
+            <a
+              className='delete'
+              data-attack-id={!isLegendaryAction ? index : undefined}
+              data-legendary-action-id={isLegendaryAction ? index : undefined}
+              onClick={onDelete}
+            >
+              Delete
+            </a>
           </div>
         </form>
         )}
@@ -358,9 +378,15 @@ export default class Attack extends Component {
             cursor: pointer;
           }
 
-          .attack:hover {
-            background-color: ${color.grey[700]};
+          .name.npc {
             color: ${color.yellow[500]};
+            font-weight: 700;
+            font-size: 14px;
+          }
+
+          .description {
+            display: block;
+            font-size: 13px;
           }
 
           a {
