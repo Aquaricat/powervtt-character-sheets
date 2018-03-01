@@ -41,7 +41,7 @@ export default class CharacterSheet extends Component {
   }
 
   componentWillReceiveProps (props) {
-    if (Number(props.character.hp) !== this.props.character.hp) {
+    if (this.refs.hp && Number(props.character.hp) !== this.props.character.hp) {
       this.refs.hp.value = props.character.hp
     }
 
